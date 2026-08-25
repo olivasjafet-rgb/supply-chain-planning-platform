@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "workbench",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "streamlit", "run", "app/app.py", "--server.port", "8531", "--server.headless", "true"],
+      "port": 8531
+    }
+  ]
+}

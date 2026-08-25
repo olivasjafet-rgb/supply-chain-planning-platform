@@ -1,0 +1,828 @@
+<title>Planning Bench Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ── tokens ───────────────────────────────────────────────────────────── */
+  :root {
+    --ground:      #FBFAF7;
+    --surface:     #F2F1EB;
+    --surface-2:   #E8E7DF;
+    --rule:        #D6D5CB;
+    --rule-strong: #B9B8AC;
+    --ink:         #17211C;
+    --ink-soft:    #3D4842;
+    --muted:       #6E7671;
+    --moss:        #3F6B4E;
+    --clay:        #9E4A34;
+
+    --measure: 66ch;
+    --sp-1: .35rem; --sp-2: .7rem;  --sp-3: 1.1rem; --sp-4: 1.7rem;
+    --sp-5: 2.6rem; --sp-6: 4rem;   --sp-7: 6rem;
+
+    --display: "Newsreader", "Iowan Old Style", Georgia, serif;
+    --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #12160F;
+      --surface:     #1A1F18;
+      --surface-2:   #232922;
+      --rule:        #2E352C;
+      --rule-strong: #454E42;
+      --ink:         #EBEDE6;
+      --ink-soft:    #C3C8BE;
+      --muted:       #8B948A;
+      --moss:        #8FBF9F;
+      --clay:        #DB9077;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:      #12160F;
+    --surface:     #1A1F18;
+    --surface-2:   #232922;
+    --rule:        #2E352C;
+    --rule-strong: #454E42;
+    --ink:         #EBEDE6;
+    --ink-soft:    #C3C8BE;
+    --muted:       #8B948A;
+    --moss:        #8FBF9F;
+    --clay:        #DB9077;
+  }
+
+  /* ── base ─────────────────────────────────────────────────────────────── */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet { max-width: 1080px; margin: 0 auto; padding: var(--sp-6) var(--sp-4) var(--sp-7); }
+
+  .row {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 0 var(--sp-4);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--sp-4);
+    margin-top: var(--sp-5);
+  }
+  .row > .rail {
+    font-family: var(--mono); font-size: .7rem; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    padding-top: .45rem;
+  }
+  .row > .col { min-width: 0; }
+  @media (max-width: 760px) {
+    .row { grid-template-columns: 1fr; gap: var(--sp-2) 0; }
+    .row > .rail { padding-top: 0; }
+  }
+
+  /* ── type ─────────────────────────────────────────────────────────────── */
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-family: var(--display); font-weight: 500; }
+  h1 { font-size: clamp(2.4rem, 5.6vw, 3.7rem); line-height: 1.04; letter-spacing: -.02em; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.15; letter-spacing: -.012em; }
+  h3 { font-family: var(--body); font-size: 1rem; font-weight: 600; margin-bottom: var(--sp-1); }
+  p { margin: 0 0 var(--sp-3); max-width: var(--measure); color: var(--ink-soft); }
+  p.lead {
+    font-family: var(--display); font-size: 1.22rem; line-height: 1.5;
+    color: var(--ink); max-width: 60ch;
+  }
+  strong { color: var(--ink); font-weight: 600; }
+  a { color: var(--moss); text-underline-offset: .18em; }
+  a:focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
+
+  code { font-family: var(--mono); font-size: .875em;
+    background: var(--surface); border: 1px solid var(--rule);
+    padding: .06em .34em; border-radius: 2px; color: var(--ink); }
+
+  ul { margin: 0 0 var(--sp-3); padding-left: 1.1rem; max-width: var(--measure); color: var(--ink-soft); }
+  li { margin-bottom: var(--sp-1); }
+  li::marker { color: var(--muted); }
+
+  /* ── masthead ─────────────────────────────────────────────────────────── */
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: var(--sp-4); }
+  .kicker {
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--moss); margin-bottom: var(--sp-3);
+  }
+  .masthead p.lead { margin-top: var(--sp-3); margin-bottom: 0; }
+  .byline {
+    display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-3);
+    font-family: var(--mono); font-size: .74rem; color: var(--muted);
+    margin-top: var(--sp-4); padding-top: var(--sp-2); border-top: 1px solid var(--rule);
+  }
+
+  /* ── figures ──────────────────────────────────────────────────────────── */
+  .metrics {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    border: 1px solid var(--rule-strong); margin: var(--sp-3) 0 var(--sp-4);
+  }
+  .metric { padding: var(--sp-3); border-right: 1px solid var(--rule); }
+  .metric:last-child { border-right: none; }
+  .metric .n {
+    font-family: var(--mono); font-size: 1.5rem; font-weight: 600;
+    font-variant-numeric: tabular-nums; color: var(--ink); display: block; letter-spacing: -.02em;
+  }
+  .metric .l { font-size: .78rem; color: var(--muted); display: block; margin-top: .2rem; line-height: 1.35; }
+  @media (max-width: 620px) {
+    .metric { border-right: none; border-bottom: 1px solid var(--rule); }
+    .metric:last-child { border-bottom: none; }
+  }
+
+  figure { margin: var(--sp-4) 0; }
+  figure svg { display: block; width: 100%; max-width: 100%; height: auto; color: var(--ink); }
+  figcaption {
+    font-size: .84rem; color: var(--muted); margin-top: var(--sp-2);
+    max-width: var(--measure); border-top: 1px solid var(--rule); padding-top: var(--sp-2);
+  }
+  .dg-box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1; }
+  .dg-box-key { fill: var(--surface-2); stroke: var(--moss); stroke-width: 1.5; }
+  .dg-t { font-family: var(--body); font-size: 12.5px; fill: var(--ink); }
+  .dg-t-b { font-family: var(--body); font-size: 12.5px; font-weight: 600; fill: var(--ink); }
+  .dg-s { font-family: var(--body); font-size: 10.5px; fill: var(--muted); }
+  .dg-a { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
+  .dg-line { stroke: var(--rule-strong); stroke-width: 1.2; fill: none; }
+  .dg-key { stroke: var(--moss); stroke-width: 1.6; fill: none; }
+
+  .tablewrap { overflow-x: auto; margin: var(--sp-3) 0 var(--sp-4); }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; min-width: 480px; }
+  caption {
+    text-align: left; font-family: var(--mono); font-size: .7rem;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: var(--sp-2);
+  }
+  th, td { text-align: left; padding: .58rem .8rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th {
+    font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--rule-strong);
+  }
+  tbody tr:last-child td { border-bottom: 1px solid var(--rule-strong); }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  td.yes { color: var(--moss); font-weight: 600; }
+  td.no  { color: var(--muted); }
+
+  /* ── panels ───────────────────────────────────────────────────────────── */
+  .finding { border-left: 3px solid var(--moss); padding-left: var(--sp-3); margin-bottom: var(--sp-5); }
+  .finding:last-child { margin-bottom: 0; }
+  .finding h3 { font-family: var(--display); font-size: 1.28rem; font-weight: 500; margin-bottom: var(--sp-2); }
+
+  .formula {
+    font-family: var(--mono); font-size: .82rem; background: var(--surface-2);
+    border: 1px solid var(--rule); padding: var(--sp-3); overflow-x: auto;
+    color: var(--ink); margin: var(--sp-3) 0; line-height: 1.7;
+  }
+  .stack {
+    font-family: var(--mono); font-size: .8rem; background: var(--surface);
+    border: 1px solid var(--rule); padding: var(--sp-3); overflow-x: auto;
+    color: var(--ink-soft); margin: var(--sp-3) 0; line-height: 1.85; white-space: pre;
+  }
+
+  .defect { border-top: 1px solid var(--rule); padding-top: var(--sp-3); margin-top: var(--sp-3); }
+  .defect:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  .defect .h {
+    font-family: var(--body); font-weight: 600; color: var(--ink);
+    margin-bottom: var(--sp-1); max-width: var(--measure);
+  }
+  .defect p:last-child { margin-bottom: 0; }
+  .swing {
+    font-family: var(--mono); font-size: .78rem; color: var(--moss);
+    display: inline-block; margin-left: .3rem; white-space: nowrap;
+  }
+
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .06em; text-transform: uppercase; padding: .12rem .45rem;
+    border: 1px solid var(--rule-strong); color: var(--muted); margin-left: .4rem; vertical-align: .12em;
+  }
+  .tag.hit { color: var(--moss); border-color: var(--moss); }
+
+  .note {
+    font-size: .84rem; color: var(--muted); max-width: var(--measure);
+    border-top: 1px solid var(--rule); padding-top: var(--sp-2); margin-top: var(--sp-3);
+  }
+
+  @media print { .row { break-inside: avoid; } body { font-size: 11pt; } }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="kicker">Working portfolio &middot; supply chain planning</div>
+    <h1>A planning engine that decides, not a dashboard that reports</h1>
+    <p class="lead">
+      A configurable demand-planning, replenishment and landed-cost platform, built in Python
+      and pointed at a simulated catalogue shaped like Back to the Roots &mdash; grow kits,
+      seeds, soils and garden kits, 26 SKUs across 9 selling accounts and 3 distribution
+      centres, sourced from a mix of 95-day ocean imports and 2-week domestic vendors.
+    </p>
+    <div class="byline">
+      <span>Jafet Olivas</span>
+      <span>Senior Planner &middot; import &amp; distribution</span>
+      <span>Python &middot; SQL &middot; Power BI &middot; Excel &middot; Streamlit</span>
+      <span>Simulated data, production logic</span>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">The problem</div>
+    <div class="col">
+      <h2>Four questions, every month, for every item</h2>
+      <p>
+        Order management comes down to a small set of decisions that have to be made again and
+        again, and are expensive in both directions when they are made badly:
+      </p>
+      <ul>
+        <li><strong>How much will we sell?</strong> &mdash; by item, by month, far enough ahead to cover the lead time.</li>
+        <li><strong>How much buffer does this item deserve?</strong> &mdash; too little loses the sale, too much locks up cash.</li>
+        <li><strong>What do we order, from whom, and when?</strong> &mdash; respecting case packs, minimums and a 95-day ocean lane.</li>
+        <li><strong>Who gets the units when there aren&rsquo;t enough?</strong> &mdash; and which accounts must not be cut.</li>
+      </ul>
+      <p>
+        This platform answers all four in one run, and shows its work at every step. The
+        numbers below are what it produces on the simulated book.
+      </p>
+
+      <div class="metrics">
+        <div class="metric"><span class="n">78.0%</span><span class="l">Forecast accuracy, 6 rolling origins</span></div>
+        <div class="metric"><span class="n">&minus;0.7%</span><span class="l">Forecast bias</span></div>
+        <div class="metric"><span class="n">99.7%</span><span class="l">Network fill rate</span></div>
+        <div class="metric"><span class="n">4.0&times;</span><span class="l">Inventory turns</span></div>
+        <div class="metric"><span class="n">$13.1M</span><span class="l">Purchases planned, 12 months</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">How it works</div>
+    <div class="col">
+      <h2>From two years of history to a signed purchase order</h2>
+      <p>
+        One command runs the whole cycle. Each stage hands the next one a finished answer, and
+        every intermediate result is written out so a planner can audit any number back to its
+        source.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 560 690" role="img"
+             aria-label="Pipeline: sales history, item master and current balances feed a demand forecast, then a buffer policy, then a time-phased replenishment plan, then allocation, producing an order book, an Excel workbook and a Power BI model.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <!-- inputs -->
+          <g>
+            <rect class="dg-box" x="8"   y="8" width="170" height="52"/>
+            <text class="dg-t-b" x="20" y="30">Sales history</text>
+            <text class="dg-s"   x="20" y="47">24 months, SKU &times; account</text>
+
+            <rect class="dg-box" x="195" y="8" width="170" height="52"/>
+            <text class="dg-t-b" x="207" y="30">Item master</text>
+            <text class="dg-s"   x="207" y="47">lead time, MOQ, case pack</text>
+
+            <rect class="dg-box" x="382" y="8" width="170" height="52"/>
+            <text class="dg-t-b" x="394" y="30">Current position</text>
+            <text class="dg-s"   x="394" y="47">on hand + open POs</text>
+          </g>
+
+          <!-- collector -->
+          <path class="dg-line" d="M 93 60 L 93 78 M 280 60 L 280 78 M 467 60 L 467 78 M 93 78 L 467 78 M 280 78 L 280 100"
+                marker-end="url(#ar)" color="currentColor"/>
+
+          <!-- stages -->
+          <g>
+            <rect class="dg-box-key" x="120" y="106" width="320" height="56"/>
+            <text class="dg-t-b" x="136" y="130">Demand forecast</text>
+            <text class="dg-s"   x="136" y="148">seasonal index &rarr; deseasonalise &rarr; level &rarr; project</text>
+          </g>
+          <path class="dg-line" d="M 280 162 L 280 200" marker-end="url(#ar)" color="currentColor"/>
+          <text class="dg-a" x="292" y="185">units by SKU and month</text>
+
+          <g>
+            <rect class="dg-box-key" x="120" y="206" width="320" height="56"/>
+            <text class="dg-t-b" x="136" y="230">Buffer policy</text>
+            <text class="dg-s"   x="136" y="248">safety stock, reorder point (min), order-up-to (max)</text>
+          </g>
+          <path class="dg-line" d="M 280 262 L 280 300" marker-end="url(#ar)" color="currentColor"/>
+          <text class="dg-a" x="292" y="285">the thresholds per item</text>
+
+          <g>
+            <rect class="dg-box-key" x="120" y="306" width="320" height="56"/>
+            <text class="dg-t-b" x="136" y="330">Time-phased plan</text>
+            <text class="dg-s"   x="136" y="348">roll inventory forward, order when cover breaks</text>
+          </g>
+          <path class="dg-line" d="M 280 362 L 280 400" marker-end="url(#ar)" color="currentColor"/>
+          <text class="dg-a" x="292" y="385">projected position, month by month</text>
+
+          <g>
+            <rect class="dg-box-key" x="120" y="406" width="320" height="56"/>
+            <text class="dg-t-b" x="136" y="430">Allocation</text>
+            <text class="dg-s"   x="136" y="448">protect retail minimums, then fair-share</text>
+          </g>
+          <path class="dg-line" d="M 280 462 L 280 500" marker-end="url(#ar)" color="currentColor"/>
+          <text class="dg-a" x="292" y="485">units by account and DC</text>
+
+          <!-- fan out to outputs -->
+          <path class="dg-line" d="M 280 500 L 280 516 M 93 516 L 467 516 M 93 516 L 93 542 M 280 516 L 280 542 M 467 516 L 467 542"
+                marker-end="url(#ar)" color="currentColor"/>
+
+          <g>
+            <rect class="dg-box" x="8"   y="548" width="170" height="58"/>
+            <text class="dg-t-b" x="20" y="570">Order book</text>
+            <text class="dg-s"   x="20" y="587">what to buy, from whom,</text>
+            <text class="dg-s"   x="20" y="600">when placed, when landed</text>
+
+            <rect class="dg-box" x="195" y="548" width="170" height="58"/>
+            <text class="dg-t-b" x="207" y="570">Excel workbook</text>
+            <text class="dg-s"   x="207" y="587">17 sheets, formatted,</text>
+            <text class="dg-s"   x="207" y="600">assumptions on page one</text>
+
+            <rect class="dg-box" x="382" y="548" width="170" height="58"/>
+            <text class="dg-t-b" x="394" y="570">Power BI model</text>
+            <text class="dg-s"   x="394" y="587">star schema + DAX</text>
+            <text class="dg-s"   x="394" y="600">measures, ready to load</text>
+          </g>
+
+          <text class="dg-a" x="8" y="640">Everything above regenerates from one command. Nothing is typed by hand.</text>
+          <text class="dg-a" x="8" y="662">Green outline = computed here. Grey = data in, artefacts out.</text>
+        </svg>
+        <figcaption>
+          The five green stages are where decisions are made. Each one is a calculation, not a
+          lookup &mdash; which is why the order book cannot be produced by querying a database.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">Construction</div>
+    <div class="col">
+      <h2>How it is built</h2>
+      <p>
+        About 3,900 lines of Python &mdash; 2,000 of them the engine itself &mdash; structured so
+        that the business rules live in one file and the logic lives in another. The engine is a set of small modules that each take
+        dataframes in and hand dataframes out &mdash; no hidden state, so any stage can be run,
+        inspected or replaced on its own.
+      </p>
+
+      <div class="stack">config.yaml                  the only business-specific file
+  │
+  ├─ src/config.py           loads and validates the hierarchy definition
+  ├─ src/dataio.py           data in — CSV today, SQL or NetSuite tomorrow
+  ├─ src/forecast.py         seasonality, level, trend, accuracy scoring
+  ├─ src/replenishment.py    safety stock, min/max, time-phased plan
+  ├─ src/allocation.py       account mix, protected minimums, fair-share
+  ├─ src/landed_cost.py      supplier rates, savings gates, cost dilution
+  ├─ src/kpis.py             turns, GMROI, weeks of supply, ABC/XYZ
+  └─ src/exports.py          Excel workbook, Power BI schema, DAX
+
+run_simulation.py            one full planning cycle
+run_scenarios.py             seven scenarios, one input changed each
+app/app.py                   the interactive workbench
+tests/test_engine.py         21 tests</div>
+
+      <h3>The product hierarchy is configuration, not code</h3>
+      <p>
+        Nothing in the engine hard-codes a product level, a location name, or a planning grain.
+        The hierarchy is declared once and the code derives its grouping keys from it:
+      </p>
+      <div class="formula">product_hierarchy:
+  levels:
+    - {key: division,    label: "Division"}
+    - {key: category,    label: "Category"}
+    - {key: subcategory, label: "Subcategory"}
+    - {key: sku,         label: "SKU"}
+  planning_level: sku</div>
+      <p>
+        A second profile in the repository proves this is real rather than aspirational: it runs
+        a <strong>three</strong>-level hierarchy planning at <strong>category</strong> instead of
+        SKU, with a different buffer method, a 9-month horizon and a binding cash cap &mdash; on
+        the same engine, with no code changes. Re-pointing the platform at a different catalogue
+        is a configuration exercise.
+      </p>
+      <p class="note">
+        When the planning level sits above the data&rsquo;s grain, attributes are aggregated the
+        way each one behaves: lead time and cost demand-weighted, case pack takes the maximum,
+        minimum order quantities sum. A plain average of lead times would quietly under-buffer
+        every long-lead item in the group.
+      </p>
+
+      <h3>Built with AI, verified by measurement</h3>
+      <p>
+        This was written in partnership with Claude &mdash; not to generate code unattended, but
+        to compress the loop that actually matters: <strong>write the logic, run it against data,
+        read the result, challenge it.</strong> Working that way makes verification cheap enough
+        to do at every step instead of at the end.
+      </p>
+      <p>
+        The evidence is that the model was caught being wrong three times before anyone else had
+        to find out. Each one is now a regression test named after the failure it documents:
+      </p>
+
+      <div class="defect">
+        <p class="h">A seasonality rule that silently disabled itself <span class="swing">18% &rarr; 78% accuracy</span></p>
+        <p>
+          A hard &ldquo;needs two full years of history&rdquo; gate saw 21&nbsp;months &divide; 12
+          = 1.75 during the backtest and flattened every seasonal index to 1.0 &mdash; forecasting
+          flat into a gardening business&rsquo;s summer trough. Replacing the cliff with
+          evidence-weighted shrinkage, where confidence grows gradually with the number of
+          observations, fixed it.
+        </p>
+      </div>
+
+      <div class="defect">
+        <p class="h">Parameters that looked optimal against a single holdout <span class="swing">+13% &rarr; &minus;9% bias</span></p>
+        <p>
+          Scored on one window the model read as over-forecasting; scored across six rolling
+          origins, the same settings read as under-forecasting. The sign flipped. Only the rolling
+          evaluation exposed the real cause underneath &mdash; a moving average describes the
+          midpoint of its window, not today, which on a growing book reads as systematic
+          under-forecast.
+        </p>
+      </div>
+
+      <div class="defect">
+        <p class="h">A cash cap applied after the plan instead of inside it <span class="swing">0 &rarr; 37 stockout months</span></p>
+        <p>
+          Capping the monthly buy appeared to save $4.3M with no service impact whatsoever
+          &mdash; because the inventory projection still contained the receipts the cap had
+          cancelled. A constraint shared across competing items has to be applied while the plan
+          is being built, ranking items by urgency against the budget, not filtered over a
+          finished one.
+        </p>
+      </div>
+
+      <p style="margin-top:1.7rem">
+        None of those were visible from reading the code. They surfaced from running it and
+        measuring it &mdash; which is the part of the workflow the AI accelerates most.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">Trade-offs</div>
+    <div class="col">
+      <h2>What it costs to change your mind</h2>
+      <p>
+        A single plan answers &ldquo;what should we buy?&rdquo;. The question a supply chain lead
+        actually gets asked is different, so the platform re-runs the identical engine with one
+        input changed at a time. Any difference in the result is attributable to that input and
+        nothing else.
+      </p>
+      <div class="tablewrap">
+        <table>
+          <caption>Seven scenarios against the plan of record</caption>
+          <thead>
+            <tr>
+              <th>Scenario</th><th class="num">Purchases</th><th class="num">Avg inventory</th>
+              <th class="num">Fill rate</th><th class="num">Stockout months</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Baseline</strong> &mdash; 95% service</td><td class="num">$13.08M</td><td class="num">$3.59M</td><td class="num">99.7%</td><td class="num">6</td></tr>
+            <tr><td>Service 99%</td><td class="num">+$0.49M</td><td class="num">+$0.38M</td><td class="num">&mdash;</td><td class="num">6</td></tr>
+            <tr><td>Service 90%</td><td class="num">&minus;$0.26M</td><td class="num">&minus;$0.20M</td><td class="num">&mdash;</td><td class="num">6</td></tr>
+            <tr><td>Cash cap $1.0M / month</td><td class="num">&minus;$3.15M</td><td class="num">&minus;$1.40M</td><td class="num">92.5%</td><td class="num">43</td></tr>
+            <tr><td>Ocean lanes +21 days</td><td class="num">+$0.63M</td><td class="num">+$0.37M</td><td class="num">99.5%</td><td class="num">8</td></tr>
+            <tr><td>Demand +15%</td><td class="num">+$2.59M</td><td class="num">+$0.45M</td><td class="num">98.9%</td><td class="num">6</td></tr>
+            <tr><td>Coverage rule (2 months)</td><td class="num">+$1.05M</td><td class="num">+$0.88M</td><td class="num">99.7%</td><td class="num">6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Two rows are worth pausing on. <strong>Moving from 95% to 99% service adds $375K of
+        inventory and changes the shortage list not at all</strong> &mdash; the reason is the
+        first finding below. And the cash cap is the one lever that genuinely trades cash for
+        service: $3.15M less spend, $1.40M less inventory, 7.2 points of fill.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">Findings</div>
+    <div class="col">
+      <h2>Three things the model surfaced</h2>
+
+      <div class="finding">
+        <h3>Every projected stockout was unfixable by policy</h3>
+        <p>
+          All six shortages are long-lead imports falling in the first four months of the
+          horizon. An order placed in month one lands in month four &mdash; so nothing inside the
+          plan can reach them. They were locked in before the cycle started, by the opening
+          inventory and whatever was already on the water.
+        </p>
+        <p>
+          That is why raising the service level leaves the shortage list untouched while adding
+          inventory everywhere else. The platform now reports the split explicitly, because the
+          two kinds carry opposite recommendations: <strong>locked</strong> shortages need
+          expediting, substitution or demand shaping; <strong>addressable</strong> ones need a
+          parameter change. Filed under one &ldquo;stockout&rdquo; heading, a planner spends the
+          week fixing the wrong problem.
+        </p>
+      </div>
+
+      <div class="finding">
+        <h3>A sourcing saving reaches the P&amp;L far later than assumed</h3>
+        <p>
+          Negotiating an origin surcharge out of supplier terms does not improve next
+          month&rsquo;s margin. The saving passes three gates, each with its own lag.
+        </p>
+
+        <figure>
+          <svg viewBox="0 0 620 250" role="img"
+               aria-label="Timeline showing a sourcing saving passing three gates: cash at the purchase order, warehouse value at goods receipt about four months later, and cost of goods sold spread over the following months, of which only 78 percent is realised within twelve months.">
+            <defs>
+              <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5"
+                      markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+              </marker>
+            </defs>
+
+            <!-- axis -->
+            <line class="dg-line" x1="120" y1="205" x2="600" y2="205" marker-end="url(#ar2)" color="currentColor"/>
+            <text class="dg-a" x="120" y="224">month 0</text>
+            <text class="dg-a" x="270" y="224">month 4</text>
+            <text class="dg-a" x="480" y="224">month 12</text>
+            <line class="dg-line" x1="120" y1="200" x2="120" y2="210"/>
+            <line class="dg-line" x1="288" y1="200" x2="288" y2="210"/>
+            <line class="dg-line" x1="498" y1="200" x2="498" y2="210"/>
+
+            <!-- gate 1 -->
+            <text class="dg-t-b" x="8" y="42">Purchase</text>
+            <text class="dg-s"   x="8" y="58">cash committed</text>
+            <rect class="dg-box-key" x="120" y="28" width="14" height="26"/>
+            <line class="dg-line" x1="134" y1="41" x2="498" y2="41" stroke-dasharray="3 4"/>
+            <text class="dg-a" x="146" y="36">full amount, the day the PO is cut</text>
+
+            <!-- gate 2 -->
+            <text class="dg-t-b" x="8" y="102">Receipt</text>
+            <text class="dg-s"   x="8" y="118">goods landed</text>
+            <rect class="dg-box-key" x="288" y="88" width="210" height="26"/>
+            <text class="dg-a" x="298" y="105">$485K &mdash; lagged by the 95-day lane</text>
+
+            <!-- gate 3 -->
+            <text class="dg-t-b" x="8" y="162">COGS</text>
+            <text class="dg-s"   x="8" y="178">units sold</text>
+            <path class="dg-key" d="M 315 175 L 498 152"/>
+            <path class="dg-line" d="M 498 152 L 585 141" stroke-dasharray="4 4"/>
+            <rect class="dg-box-key" x="315" y="152" width="183" height="0" opacity="0"/>
+            <polygon points="315,175 498,152 498,175" fill="var(--moss)" opacity="0.16"/>
+            <polygon points="498,152 585,141 585,175 498,175" fill="var(--moss)" opacity="0.06"/>
+            <text class="dg-a" x="322" y="192">78% realised by month 12</text>
+            <text class="dg-a" x="506" y="133">the rest is</text>
+            <text class="dg-a" x="506" y="146">still in stock</text>
+
+            <line class="dg-line" x1="498" y1="20" x2="498" y2="200" stroke-dasharray="2 5"/>
+          </svg>
+          <figcaption>
+            The cash effect lands immediately, the warehouse effect after the lead time, and the
+            P&amp;L effect only as the goods are actually sold &mdash; which is why 22% of the
+            saving is still sitting in inventory at month 12.
+          </figcaption>
+        </figure>
+
+        <p>
+          Under weighted-average costing, cheaper receipts <strong>dilute</strong> the pool they
+          join rather than replacing it:
+        </p>
+        <div class="formula">ratio(m) = [ Inv(m&minus;1) &times; ratio(m&minus;1) + Receipts_new(m) ]
+           &divide; [ Inv(m&minus;1) + Receipts_old(m) ]</div>
+        <p>
+          So a four-month inventory turn does <strong>not</strong> mean the benefit is booked by
+          month four &mdash; the ratio approaches its floor asymptotically. It is also not
+          monotonic: a month weighted toward domestic supply admits receipts carrying no
+          surcharge, above an already-discounted pool, and the reported saving moves backwards.
+          Worth knowing before someone reads a single month as a regression.
+        </p>
+      </div>
+
+      <div class="finding">
+        <h3>Supplier cost rates have to be measured, not assumed</h3>
+        <p>
+          Each supplier&rsquo;s origin surcharge is computed from its own actual expenses divided
+          by its own actual purchase value. Across this book the real spread runs from
+          <strong>0% to 6.7%</strong>, weighting to 4.68% overall. A single blended assumption
+          would misprice every supplier in the list &mdash; overstating the domestic vendors, who
+          carry none of it, and understating the long-lane imports, who carry the most.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">The stack</div>
+    <div class="col">
+      <h2>Streamlit for deciding, Power BI for distributing</h2>
+      <p>
+        The front end is a Streamlit application, and it gets mistaken for Power BI often enough
+        that the distinction is worth stating plainly. A BI tool filters numbers that already
+        exist somewhere. Nothing in the order book exists until the engine solves for it &mdash;
+        there is no table anywhere containing <em>&ldquo;order 14,400 units of BTR-1001 in
+        November&rdquo;</em>. That row is the output of a projection.
+      </p>
+
+      <div class="tablewrap">
+        <table>
+          <caption>Where the line sits</caption>
+          <thead>
+            <tr><th>Capability</th><th>Power BI / Tableau</th><th>This workbench</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Read, aggregate, slice</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Compute a forecast</td><td class="no">No</td><td class="yes">Yes</td></tr>
+            <tr><td>Size safety stock from variability</td><td class="no">No</td><td class="yes">Yes</td></tr>
+            <tr><td>Solve a time-phased order plan</td><td class="no">No</td><td class="yes">Yes</td></tr>
+            <tr><td>Respond to a changed assumption</td><td class="no">Filters a table</td><td class="yes">Recomputes the plan</td></tr>
+            <tr><td>Reach the whole company</td><td class="yes">Yes</td><td class="no">Planning team</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Both belong in the stack, and this project ships both. Every run also writes a clean star
+        schema and a <code>measures.dax</code> file, because publishing to a wide audience is
+        genuinely Power BI&rsquo;s job. <strong>Python does the solving; Power BI does the
+        distribution.</strong>
+      </p>
+      <p>
+        In the workbench, every sidebar control re-runs the full engine and redraws from the new
+        result. Ticking <em>Cap monthly purchases</em> recomputes 26 SKUs across 12 months and
+        moves the fill rate from 99.7% to 92.5% in about a second. No BI filter can do that,
+        because the answer is not in any table until it has been computed.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">In production</div>
+    <div class="col">
+      <h2>The same problem, already running on Power BI</h2>
+      <p>
+        The engine above is a simulation. Alongside it I build and maintain a
+        <strong>production Power BI report</strong> for a national retail and distribution
+        business &mdash; a daily min/max evaluation that answers one question per SKU per
+        location:
+      </p>
+      <p class="lead" style="margin:1.1rem 0">
+        We are below the minimum. Where does the cover come from &mdash; transfer it from the
+        distribution centre, wait for what is already in transit, or raise a purchase order?
+      </p>
+      <p>
+        Separating <em>transfer</em> from <em>buy</em> is the whole point. Both look identical
+        in a raw &ldquo;below minimum&rdquo; report, and treating them the same means buying
+        inventory the company already owns &mdash; paying twice for the same cover while the
+        original units age at the DC.
+      </p>
+
+      <div class="tablewrap">
+        <table>
+          <caption>What the model looks like</caption>
+          <thead><tr><th>Element</th><th class="num">Count</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Functional tables</td><td class="num">12</td><td>star schema on the item-requirement dimension</td></tr>
+            <tr><td>Source systems</td><td class="num">5</td><td>SQL Server warehouse, two dataflows, Excel, CSV</td></tr>
+            <tr><td>DAX measures</td><td class="num">36</td><td>in a dedicated measure table</td></tr>
+            <tr><td>Relationships</td><td class="num">20</td><td>all single-direction, many-to-one</td></tr>
+            <tr><td>Bidirectional / many-to-many</td><td class="num">0</td><td>deliberate &mdash; no ambiguous filter paths</td></tr>
+            <tr><td>Pages / visuals</td><td class="num">3 / 86</td><td>in daily use</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        The measure that matters most caps coverage <strong>per item before summing</strong>.
+        The naive version &mdash; total available &divide; total required &mdash; lets surplus on
+        one SKU silently offset a shortage on another, so a location with triple cover on one
+        item and nothing on a second reads as fully covered. Capping at
+        <code>MIN(available, required)</code> inside a <code>SUMX</code> over each SKU makes the
+        number mean what a planner thinks it means. The same pattern, run against three
+        different supply sets, produces the sentence the morning meeting actually needs:
+        <em>&ldquo;71% today, 88% once the transit lands, 96% if we also pull from the DC.&rdquo;</em>
+      </p>
+      <p class="note">
+        Documented separately as a case study &mdash; architecture, the four DAX techniques it
+        rests on, and a model-health audit I ran against it, including what I would change
+        next. It carries no figures, identities, hosts or paths from the business it serves.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">Role fit</div>
+    <div class="col">
+      <h2>Against what the role asks for</h2>
+      <div class="tablewrap">
+        <table>
+          <caption>Requirement &rarr; where it lives in this project</caption>
+          <thead>
+            <tr><th>What the role calls for</th><th>Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Demand planning &amp; inventory forecasting <span class="tag hit">core</span></td>
+                <td>Seasonal engine at 78% accuracy, scored on rolling origins</td></tr>
+            <tr><td>Minimum and maximum values for replenishment <span class="tag hit">core</span></td>
+                <td>Reorder point and order-up-to computed per item from its own variability</td></tr>
+            <tr><td>Review store demand, decide allocation</td>
+                <td>Account-level allocation with protected presentation minimums</td></tr>
+            <tr><td>Right products and quantities per store</td>
+                <td>Six-month account mix, rebuilt per item, drives every split</td></tr>
+            <tr><td>Product pipelining</td>
+                <td>Time-phased receipts; the frozen-window triage is exactly this problem</td></tr>
+            <tr><td>Warehouse inventory &amp; DC coordination</td>
+                <td>Node-level requirements across three distribution centres</td></tr>
+            <tr><td>Coordinate with suppliers for sourcing</td>
+                <td>Per-supplier lead time, MOQ, case pack and measured landed-cost rates</td></tr>
+            <tr><td>Technical reports and dashboards</td>
+                <td>17-sheet Excel workbook, Streamlit workbench, Power BI star schema and DAX</td></tr>
+            <tr><td>Connect systems, automate workflows</td>
+                <td>One command replaces a manual cycle; the data source is a single swappable module</td></tr>
+            <tr><td>Advanced Excel <span class="tag">required</span></td>
+                <td>Formatted, formula-driven workbooks are the standing deliverable in my current role</td></tr>
+            <tr><td>Power BI or similar BI tooling <span class="tag">required</span></td>
+                <td>A production report in daily use (case study alongside), plus a star schema and DAX measures shipped with every run of the engine</td></tr>
+            <tr><td>Comfortable using AI tools such as Claude <span class="tag">required</span></td>
+                <td>This platform was built that way &mdash; see <em>How it is built</em> above</td></tr>
+            <tr><td>Python, SQL, technical scripting <span class="tag">preferred</span></td>
+                <td>3,900 lines across engine, runners, app and tests; SQLite output; SQL Server in the production system</td></tr>
+            <tr><td>Manufacturing or operations environment <span class="tag">preferred</span></td>
+                <td>Current role plans a 400-class import and distribution book</td></tr>
+            <tr><td>Engineering background <span class="tag">preferred</span></td>
+                <td>The approach throughout: measure, model, test, regress</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <section class="row">
+    <div class="rail">Method</div>
+    <div class="col">
+      <h2>Choices I would defend in a review</h2>
+      <ul>
+        <li>
+          <strong>Seasonality is estimated one level up.</strong> A single SKU has two
+          observations per calendar month in a 24-month history &mdash; far too few for a stable
+          index. Its category has twenty or more. Accept a little bias to remove a lot of variance.
+        </li>
+        <li>
+          <strong>Weak estimates are shrunk, not discarded.</strong> Confidence in a seasonal
+          index grows with the number of times that month has actually been observed. Nothing is
+          thrown away; thin evidence is pulled toward neutral in proportion to how thin it is.
+        </li>
+        <li>
+          <strong>Safety stock carries both variances</strong> &mdash; demand and lead time.
+          Dropping the lead-time term is the most common way to under-stock a long-lead import:
+          on a 95-day lane swinging &plusmn;15 days, that term dominates.
+        </li>
+        <li>
+          <strong>Item health is judged against the item&rsquo;s own supply chain.</strong> A
+          95-day import holding 18 weeks of cover is running correctly; a 14-day domestic SKU
+          holding 18 weeks is not. One company-wide threshold is wrong about half the catalogue.
+        </li>
+        <li>
+          <strong>Minimum presentation stock is protected before fair-share.</strong> Straight
+          pro-rata quietly drops retail doors below the level where the shelf is lost, and losing
+          the shelf costs far more than the units.
+        </li>
+        <li>
+          <strong>Planner overrides never destroy the statistical value.</strong> Both are
+          stored, so forecast error can be attributed to the model or to the human, and any
+          override can be rolled back.
+        </li>
+        <li>
+          <strong>Accuracy is reported with its spread.</strong> 78.0% &plusmn;3.0% across six
+          folds, worst fold 74.4%. A model that swings between 60% and 90% needs different
+          governance than one that sits at 78% every month, and a single number hides that.
+        </li>
+      </ul>
+      <p class="note">
+        The data is simulated with a fixed seed, so every figure here regenerates from
+        <code>python run_simulation.py</code>. Supplier names are anonymised; demand shapes, lead
+        times, case packs and cost rates are set to realistic ranges for the category. No
+        proprietary data from any employer appears anywhere in the project.
+      </p>
+    </div>
+  </section>
+
+</div>

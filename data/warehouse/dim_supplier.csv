@@ -1,0 +1,10 @@
+supplier_id,origin_country,lead_time_days,lead_time_std_days,origin_expense_rate,payment_terms,sourcing_type
+SUP-01,China,95,12,0.058,30% deposit / 70% on B/L,Import
+SUP-02,China,102,15,0.061,T/T 30 days,Import
+SUP-03,Vietnam,88,11,0.049,L/C at sight,Import
+SUP-04,India,110,18,0.067,T/T 45 days,Import
+SUP-05,Mexico,35,6,0.022,Net 30,Import
+SUP-06,United States,14,3,0.0,Net 30,Domestic
+SUP-07,United States,10,2,0.0,Net 45,Domestic
+SUP-08,United States,21,4,0.0,Net 30,Domestic
+SUP-09,Canada,18,4,0.008,Net 30,Import

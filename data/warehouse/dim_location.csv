@@ -1,0 +1,10 @@
+account,channel,node,demand_share,orders_in_case_packs,node_city
+Home Depot,Retail,DC-West,0.205,True,"Stockton, CA"
+Lowe's,Retail,DC-Central,0.145,True,"Dallas, TX"
+Target,Retail,DC-Central,0.13,True,"Dallas, TX"
+Walmart,Retail,DC-East,0.155,True,"Harrisburg, PA"
+Costco,Retail,DC-West,0.09,True,"Stockton, CA"
+Kroger,Retail,DC-Central,0.055,True,"Dallas, TX"
+Whole Foods,Retail,DC-East,0.045,True,"Harrisburg, PA"
+Amazon,Ecommerce,DC-East,0.115,False,"Harrisburg, PA"
+DTC Shopify,Ecommerce,DC-West,0.06,False,"Stockton, CA"

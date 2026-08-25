@@ -1,0 +1,118 @@
+# =============================================================================
+#  Planning configuration
+# =============================================================================
+#  Everything that is business-specific lives in this file. The engine in src/
+#  reads it and adapts: no hard-coded product levels, no hard-coded location
+#  names, no hard-coded planning grain.
+#
+#  To re-point the platform at a different business you change THIS FILE ONLY.
+#  See `profiles/` for a second, very different profile (an importer/distributor
+#  with 400+ classes) that runs on the exact same code.
+# =============================================================================
+
+profile_name: "Back to the Roots"
+currency: "USD"
+units: "each"                 # base selling unit
+fiscal_year_start_month: 1
+
+# -----------------------------------------------------------------------------
+# 1. PRODUCT HIERARCHY  --  the "variables" that make the model portable
+# -----------------------------------------------------------------------------
+#  `levels` is an ordered list from broadest to narrowest. Add, remove or rename
+#  levels freely; the engine derives its grouping keys from this list.
+#  `planning_level` is the grain at which demand is forecast and orders are cut.
+#  `reporting_rollups` are the levels dashboards aggregate to.
+# -----------------------------------------------------------------------------
+product_hierarchy:
+  levels:
+    - key: division           # e.g. Indoor Growing / Outdoor Gardening
+      label: "Division"
+    - key: category           # e.g. Mushroom Kits / Seeds / Soils & Media
+      label: "Category"
+    - key: subcategory
+      label: "Subcategory"
+    - key: sku
+      label: "SKU"
+  planning_level: sku
+  reporting_rollups: [division, category]
+
+# -----------------------------------------------------------------------------
+# 2. NETWORK / LOCATION HIERARCHY
+# -----------------------------------------------------------------------------
+location_hierarchy:
+  levels:
+    - key: channel            # Retail / DTC
+      label: "Channel"
+    - key: account            # Home Depot, Target, Amazon, Shopify ...
+      label: "Account"
+    - key: node               # the DC that physically ships
+      label: "Fulfillment Node"
+  allocation_level: account   # where store/customer allocation is decided
+  stocking_level: node        # where inventory is physically held
+
+# -----------------------------------------------------------------------------
+# 3. DEMAND PLANNING
+# -----------------------------------------------------------------------------
+forecast:
+  method: "seasonal_moving_average"   # seasonal_moving_average | naive | manual
+  history_months: 24
+  horizon_months: 12
+  # Chosen by rolling-origin backtest (6 folds, 3-month horizon), not by fitting
+  # a single holdout window -- on one fold the bias read +13%, across six it read
+  # -9%. Selected setting: 78.0% mean accuracy, -0.7% bias, worst fold 74.4%.
+  moving_average_window: 9            # months used for the base level
+  seasonality:
+    enabled: true
+    shrinkage_k: 0.5                  # evidence weighting: n / (n + k) years observed
+    # Damping is redundant once the index is shrunk by evidence -- applying both
+    # discounts seasonality twice and cost ~2 points of accuracy at every window
+    # length tested. Kept as a lever, deliberately set to "off".
+    damping: 1.0                      # 0 = ignore seasonality, 1 = apply it fully
+  allow_manual_override: true         # planner overrides win, statistical value is kept
+
+# -----------------------------------------------------------------------------
+# 4. REPLENISHMENT POLICY
+# -----------------------------------------------------------------------------
+#  Two interchangeable ways to size the buffer. `service_level` is the
+#  statistical one (safety stock from demand variability); `coverage` is the
+#  months-of-supply rule most merchandising teams already think in.
+# -----------------------------------------------------------------------------
+replenishment:
+  safety_stock_method: "service_level"   # service_level | coverage_months
+  target_service_level: 0.95             # -> z = 1.645
+  coverage_months_default: 2.0           # used when method = coverage_months
+  review_period_days: 30                 # monthly planning cycle
+  order_policy: "min_max"                # min_max | reorder_point | lot_for_lot
+  respect_moq: true
+  respect_case_pack: true
+  max_monthly_purchase_usd: null         # cash cap; null = uncapped
+
+# -----------------------------------------------------------------------------
+# 5. LANDED COST
+# -----------------------------------------------------------------------------
+#  Imported goods carry origin-side costs beyond FOB (freight, handling,
+#  documentation, inspection). Modeled empirically per supplier as a % of
+#  purchase value rather than as a flat assumption.
+# -----------------------------------------------------------------------------
+landed_cost:
+  enabled: true
+  basis: "empirical_supplier_rate"    # empirical_supplier_rate | flat_rate
+  flat_rate: 0.04
+  costing_method: "weighted_average"  # weighted_average | fifo
+  scenario:
+    name: "Origin surcharge removed"
+    effective_from: "2026-05"
+    description: >
+      Models the P&L and cash effect of renegotiating origin-side charges out
+      of supplier terms. Savings flow through three stages with different lags:
+      purchase commitment -> goods receipt -> cost of goods sold.
+
+# -----------------------------------------------------------------------------
+# 6. KPI TARGETS  --  what "good" looks like, used to color the dashboards
+# -----------------------------------------------------------------------------
+kpi_targets:
+  weeks_of_supply_min: 6
+  weeks_of_supply_max: 14
+  inventory_turns_min: 4.0
+  fill_rate_min: 0.97
+  gmroi_min: 2.5

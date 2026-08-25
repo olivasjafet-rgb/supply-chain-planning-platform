@@ -1,0 +1,79 @@
+# =============================================================================
+#  Second profile -- deliberately dissimilar, same code
+# =============================================================================
+#  Proof that the platform is portable by configuration rather than by rewrite.
+#  Against the BTTR profile this changes almost everything that matters:
+#
+#    * a THREE-level hierarchy instead of four
+#    * planning at CATEGORY, not SKU -- a coarser grain, the way a merchandising
+#      team plans an open-to-buy and lets the buyer split the order
+#    * a months-of-coverage buffer instead of a statistical one
+#    * a shorter horizon and a weekly review cycle
+#    * a cash cap that actually binds
+#
+#  Run it with:  python run_simulation.py profiles/category_planning.yaml
+# =============================================================================
+
+profile_name: "Category-level open-to-buy"
+currency: "USD"
+units: "each"
+fiscal_year_start_month: 1
+
+product_hierarchy:
+  levels:
+    - key: division
+      label: "Division"
+    - key: category
+      label: "Category"
+  planning_level: category        # <- the grain moves up two levels
+  reporting_rollups: [division]
+
+location_hierarchy:
+  levels:
+    - key: channel
+      label: "Channel"
+    - key: account
+      label: "Account"
+    - key: node
+      label: "Fulfillment Node"
+  allocation_level: account
+  stocking_level: node
+
+forecast:
+  method: "seasonal_moving_average"
+  history_months: 24
+  horizon_months: 9               # shorter horizon
+  moving_average_window: 6
+  seasonality:
+    enabled: true
+    shrinkage_k: 0.5
+    damping: 1.0
+  allow_manual_override: true
+
+replenishment:
+  safety_stock_method: "coverage_months"   # <- different buffer logic entirely
+  target_service_level: 0.95
+  coverage_months_default: 1.5
+  review_period_days: 7                    # weekly review, not monthly
+  order_policy: "min_max"
+  respect_moq: true
+  respect_case_pack: true
+  max_monthly_purchase_usd: 1500000        # a cap that binds
+
+landed_cost:
+  enabled: true
+  basis: "empirical_supplier_rate"
+  flat_rate: 0.04
+  costing_method: "weighted_average"
+  scenario:
+    name: "Origin surcharge removed"
+    effective_from: "2026-05"
+    description: >
+      Same sourcing scenario, evaluated at category grain.
+
+kpi_targets:
+  weeks_of_supply_min: 4
+  weeks_of_supply_max: 12
+  inventory_turns_min: 5.0
+  fill_rate_min: 0.98
+  gmroi_min: 3.0
