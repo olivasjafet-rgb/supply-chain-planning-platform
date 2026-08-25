@@ -1,0 +1,169 @@
+sku,sku_name,division,category,subcategory,supplier_id,lead_time_days,place_in_month,order_arrival_month,order_units,case_pack,moq_units,unit_cost_usd,order_value_usd,reorder_point,safety_stock,order_up_to,weeks_of_supply
+BTR-1001,Organic Mushroom Grow Kit - Oyster,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2026-09,2027-01,129990,6,3000,6.7712,880188.29,89037.0,28615.0,108118.0,2.3
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2026-09,2026-10,54294,6,10000,4.3,233464.2,36598.0,21872.0,68153.0,5.5
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2026-09,2027-01,15864,4,1200,14.5888,231436.72,10935.0,3412.0,13148.0,6.4
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2026-09,2027-01,11008,4,800,20.1663,221990.63,8908.0,2357.0,10695.0,0.0
+BTR-1002,Pink Oyster Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2026-09,2027-01,25908,6,2000,7.2473,187763.05,22771.0,7328.0,27648.0,11.1
+BTR-1003,Lion's Mane Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-02,102,2026-09,2027-01,21456,6,2000,8.0636,173012.6,15213.0,4450.0,18379.0,7.8
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2026-09,2026-12,13932,4,1200,12.1684,169530.15,13711.0,4722.0,16776.0,13.4
+BTR-1004,Mushroom Grow Kit 2-Pack,Indoor Growing,Mushroom Kits,Multi-Packs,SUP-01,95,2026-09,2027-01,13168,4,1500,12.8018,168574.1,12071.0,3775.0,14691.0,11.7
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-09,2027-01,26964,12,2400,5.2816,142413.06,30694.0,7199.0,37102.0,8.8
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2026-09,2026-10,7460,4,1200,14.2,105932.0,3767.0,1918.0,6409.0,1.7
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2026-09,2026-10,27822,6,8000,3.6,100159.2,24685.0,14922.0,45606.0,6.1
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2026-09,2026-11,23508,12,3000,3.8325,90094.41,23460.0,11697.0,33543.0,8.1
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2026-09,2026-12,9852,6,1500,8.8116,86811.88,12769.0,4135.0,15712.0,7.3
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-09,2027-01,16392,12,1800,5.2816,86575.99,18703.0,5677.0,22256.0,10.6
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,88,2026-09,2026-12,2828,2,1000,29.7916,84250.64,10607.0,2368.0,13416.0,20.7
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2026-09,2026-12,4764,4,900,17.6232,83956.92,8805.0,4042.0,10429.0,18.6
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2026-09,2026-12,8400,12,1500,6.0842,51107.28,8488.0,1865.0,10746.0,6.4
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-09,2027-01,9396,12,2400,5.2816,49625.91,21165.0,5160.0,25530.0,12.7
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2026-09,2026-12,9876,12,2500,4.4058,43511.68,16234.0,4459.0,20248.0,15.9
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2026-09,2026-11,37176,24,6000,0.9709,36094.18,33151.0,15941.0,47902.0,8.4
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2026-09,2026-10,12144,24,4000,2.4192,29378.76,10168.0,5927.0,17237.0,6.2
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2026-09,2026-11,22320,24,6000,1.1242,25092.14,22912.0,10510.0,33542.0,5.8
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2026-10,2026-11,3226,1,600,32.5,104845.0,2206.0,1002.0,3926.0,5.4
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2026-10,2026-11,2920,4,1200,14.2,41464.0,3767.0,1918.0,6409.0,8.1
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2026-10,2027-02,2372,4,1200,14.5888,34604.63,10935.0,3412.0,13148.0,5.9
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2026-10,2026-12,3864,8,1500,6.3364,24483.85,6472.0,3209.0,9268.0,12.4
+BTR-1001,Organic Mushroom Grow Kit - Oyster,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2026-11,2027-03,32640,6,3000,6.7712,221011.97,89037.0,28615.0,108118.0,0.0
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,88,2026-11,2027-02,3948,2,1000,29.7916,117617.24,10607.0,2368.0,13416.0,23.6
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2026-11,2026-12,24474,6,8000,3.6,88106.4,24685.0,14922.0,45606.0,4.9
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-11,2027-03,14292,12,2400,5.2816,75484.63,30694.0,7199.0,37102.0,8.5
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2026-11,2027-03,3436,4,800,20.1663,69291.41,8908.0,2357.0,10695.0,1.2
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2026-11,2027-02,5268,4,1200,12.1684,64103.13,13711.0,4722.0,16776.0,8.2
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2026-11,2027-01,15252,12,3000,3.8325,58453.29,23460.0,11697.0,33543.0,13.7
+BTR-1002,Pink Oyster Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2026-11,2027-03,7950,6,2000,7.2473,57616.04,22771.0,7328.0,27648.0,7.9
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2026-11,2027-02,3164,4,900,17.6232,55759.8,8805.0,4042.0,10429.0,16.1
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2026-11,2027-02,5628,6,1500,8.8116,49591.68,12769.0,4135.0,15712.0,10.4
+BTR-1004,Mushroom Grow Kit 2-Pack,Indoor Growing,Mushroom Kits,Multi-Packs,SUP-01,95,2026-11,2027-03,3852,4,1500,12.8018,49312.53,12071.0,3775.0,14691.0,8.4
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-11,2027-03,8340,12,2400,5.2816,44048.54,21165.0,5160.0,25530.0,18.0
+BTR-1003,Lion's Mane Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-02,102,2026-11,2027-03,4872,6,2000,8.0636,39285.86,15213.0,4450.0,18379.0,4.0
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-11,2027-03,7248,12,1800,5.2816,38281.04,18703.0,5677.0,22256.0,9.7
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2026-11,2027-03,2612,4,1200,14.5888,38105.95,10935.0,3412.0,13148.0,2.6
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2026-11,2027-02,4512,12,1500,6.0842,27451.91,8488.0,1865.0,10746.0,8.0
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2026-11,2027-02,5892,12,2500,4.4058,25958.97,16234.0,4459.0,20248.0,16.6
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2026-11,2027-01,26040,24,6000,0.9709,25282.24,33151.0,15941.0,47902.0,11.0
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2026-11,2026-12,8616,24,4000,2.4192,20843.83,10168.0,5927.0,17237.0,6.8
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2026-11,2027-01,17304,24,6000,1.1242,19453.16,22912.0,10510.0,33542.0,11.7
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2026-11,2027-01,2840,8,1500,6.3364,17995.38,6472.0,3209.0,9268.0,9.4
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2026-12,2027-01,50490,6,10000,4.3,217107.0,36598.0,21872.0,68153.0,4.4
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2026-12,2027-01,20132,4,6000,8.9,179174.8,10814.0,6630.0,23365.0,3.2
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2026-12,2027-01,2888,1,600,32.5,93860.0,2206.0,1002.0,3926.0,4.8
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2026-12,2027-01,4604,4,1200,14.2,65376.8,3767.0,1918.0,6409.0,4.8
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2026-12,2027-02,13584,12,3000,3.8325,52060.68,23460.0,11697.0,33543.0,10.8
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-12,2027-04,9108,12,2400,5.2816,48104.81,30694.0,7199.0,37102.0,9.9
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2026-12,2027-04,2376,4,800,20.1663,47915.13,8908.0,2357.0,10695.0,3.6
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2026-12,2027-03,2536,4,900,17.6232,44692.44,8805.0,4042.0,10429.0,22.7
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2026-12,2027-03,3448,4,1200,12.1684,41956.64,13711.0,4722.0,16776.0,24.0
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2026-12,2027-03,4602,6,1500,8.8116,40550.98,12769.0,4135.0,15712.0,18.6
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2026-12,2027-04,2372,4,1200,14.5888,34604.63,10935.0,3412.0,13148.0,0.0
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-12,2027-04,5196,12,2400,5.2816,27443.19,21165.0,5160.0,25530.0,21.4
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2026-12,2027-02,4032,8,1500,6.3364,25548.36,6472.0,3209.0,9268.0,11.7
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2026-12,2027-04,4632,12,1800,5.2816,24464.37,18703.0,5677.0,22256.0,10.7
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2026-12,2027-02,23640,24,6000,0.9709,22952.08,33151.0,15941.0,47902.0,8.3
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2026-12,2027-03,2964,12,1500,6.0842,18033.57,8488.0,1865.0,10746.0,17.8
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2026-12,2027-02,15624,24,6000,1.1242,17564.5,22912.0,10510.0,33542.0,9.0
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2026-12,2027-01,7152,24,4000,2.4192,17302.12,10168.0,5927.0,17237.0,8.7
+BTR-1001,Organic Mushroom Grow Kit - Oyster,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2027-01,2027-05,31572,6,3000,6.7712,213780.33,89037.0,28615.0,108118.0,28.3
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-01,2027-02,43782,6,8000,3.6,157615.2,24685.0,14922.0,45606.0,3.7
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,88,2027-01,2027-04,5200,2,1000,29.7916,154916.32,10607.0,2368.0,13416.0,19.8
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-01,2027-02,32892,6,10000,4.3,141435.6,36598.0,21872.0,68153.0,7.5
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-01,2027-02,14044,4,6000,8.9,124991.6,10814.0,6630.0,23365.0,6.1
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2027-01,2027-03,17004,12,3000,3.8325,65167.83,23460.0,11697.0,33543.0,12.7
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-01,2027-02,1961,1,600,32.5,63732.5,2206.0,1002.0,3926.0,7.5
+BTR-1002,Pink Oyster Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2027-01,2027-05,8070,6,2000,7.2473,58485.71,22771.0,7328.0,27648.0,30.6
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2027-01,2027-05,2820,4,800,20.1663,56868.97,8908.0,2357.0,10695.0,20.9
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2027-01,2027-04,3040,4,900,17.6232,53574.53,8805.0,4042.0,10429.0,19.0
+BTR-1004,Mushroom Grow Kit 2-Pack,Indoor Growing,Mushroom Kits,Multi-Packs,SUP-01,95,2027-01,2027-05,3868,4,1500,12.8018,49517.36,12071.0,3775.0,14691.0,34.0
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2027-01,2027-04,5586,6,1500,8.8116,49221.6,12769.0,4135.0,15712.0,15.1
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-01,2027-02,15564,6,8000,3.1,48248.4,6688.0,4064.0,14559.0,3.2
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2027-01,2027-04,3956,4,1200,12.1684,48138.19,13711.0,4722.0,16776.0,19.9
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-01,2027-02,3180,4,1200,14.2,45156.0,3767.0,1918.0,6409.0,7.3
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-01,2027-05,8184,12,2400,5.2816,43224.61,30694.0,7199.0,37102.0,22.5
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2027-01,2027-05,2624,4,1200,14.5888,38281.01,10935.0,3412.0,13148.0,22.3
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2027-01,2027-04,7992,12,2500,4.4058,35211.15,16234.0,4459.0,20248.0,19.0
+BTR-1003,Lion's Mane Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-02,102,2027-01,2027-05,4284,6,2000,8.0636,34544.46,15213.0,4450.0,18379.0,34.6
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2027-01,2027-03,5112,8,1500,6.3364,32391.68,6472.0,3209.0,9268.0,11.4
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2027-01,2027-03,30024,24,6000,0.9709,29150.3,33151.0,15941.0,47902.0,10.1
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2027-01,2027-02,10104,24,4000,2.4192,24443.6,10168.0,5927.0,17237.0,8.6
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-01,2027-05,4620,12,2400,5.2816,24400.99,21165.0,5160.0,25530.0,27.4
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2027-01,2027-03,19728,24,6000,1.1242,22178.22,22912.0,10510.0,33542.0,10.8
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-01,2027-05,4188,12,1800,5.2816,22119.34,18703.0,5677.0,22256.0,26.4
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2027-01,2027-04,3420,12,1500,6.0842,20807.96,8488.0,1865.0,10746.0,13.9
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-02,2027-03,51858,6,10000,4.3,222989.4,36598.0,21872.0,68153.0,7.3
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-02,2027-03,22116,4,6000,8.9,196832.4,10814.0,6630.0,23365.0,5.9
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-02,2027-03,44010,6,8000,3.6,158436.0,24685.0,14922.0,45606.0,5.6
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,88,2027-02,2027-05,3034,2,1000,29.7916,90387.71,10607.0,2368.0,13416.0,22.4
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-02,2027-03,2712,1,600,32.5,88140.0,2206.0,1002.0,3926.0,7.3
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2027-02,2027-04,16476,12,3000,3.8325,63144.27,23460.0,11697.0,33543.0,13.1
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-02,2027-03,4444,4,1200,14.2,63104.8,3767.0,1918.0,6409.0,7.1
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2027-02,2027-06,2484,4,800,20.1663,50093.09,8908.0,2357.0,10695.0,17.0
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2027-02,2027-05,2740,4,900,17.6232,48287.57,8805.0,4042.0,10429.0,21.3
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2027-02,2027-05,5088,6,1500,8.8116,44833.42,12769.0,4135.0,15712.0,17.2
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2027-02,2027-05,3560,4,1200,12.1684,43319.5,13711.0,4722.0,16776.0,23.0
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-02,2027-03,13392,6,8000,3.1,41515.2,6688.0,4064.0,14559.0,6.1
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2027-02,2027-06,2544,4,1200,14.5888,37113.91,10935.0,3412.0,13148.0,21.9
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-02,2027-06,6504,12,2400,5.2816,34351.53,30694.0,7199.0,37102.0,18.3
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2027-02,2027-04,5024,8,1500,6.3364,31834.07,6472.0,3209.0,9268.0,11.7
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2027-02,2027-03,12768,24,4000,2.4192,30888.35,10168.0,5927.0,17237.0,8.8
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2027-02,2027-04,29472,24,6000,0.9709,28614.36,33151.0,15941.0,47902.0,10.3
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2027-02,2027-04,19320,24,6000,1.1242,21719.54,22912.0,10510.0,33542.0,11.1
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2027-02,2027-05,4776,12,2500,4.4058,21042.1,16234.0,4459.0,20248.0,21.4
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2027-02,2027-05,3072,12,1500,6.0842,18690.66,8488.0,1865.0,10746.0,17.0
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-03,2027-04,57024,6,10000,4.3,245203.2,36598.0,21872.0,68153.0,7.8
+BTR-1001,Organic Mushroom Grow Kit - Oyster,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2027-03,2027-07,33540,6,3000,6.7712,227106.05,89037.0,28615.0,108118.0,27.8
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-03,2027-04,24288,4,6000,8.9,216163.2,10814.0,6630.0,23365.0,6.3
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-03,2027-04,49212,6,8000,3.6,177163.2,24685.0,14922.0,45606.0,5.9
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-03,2027-04,3296,1,600,32.5,107120.0,2206.0,1002.0,3926.0,7.5
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-03,2027-04,5464,4,1200,14.2,77588.8,3767.0,1918.0,6409.0,7.3
+BTR-1002,Pink Oyster Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,95,2027-03,2027-07,7434,6,2000,7.2473,53876.43,22771.0,7328.0,27648.0,30.8
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2027-03,2027-05,12048,12,3000,3.8325,46173.96,23460.0,11697.0,33543.0,14.6
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-03,2027-04,14682,6,8000,3.1,45514.2,6688.0,4064.0,14559.0,6.5
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2027-03,2027-07,2244,4,800,20.1663,45253.18,8908.0,2357.0,10695.0,18.8
+BTR-1004,Mushroom Grow Kit 2-Pack,Indoor Growing,Mushroom Kits,Multi-Packs,SUP-01,95,2027-03,2027-07,3520,4,1500,12.8018,45062.34,12071.0,3775.0,14691.0,34.4
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2027-03,2027-07,2620,4,1200,14.5888,38222.66,10935.0,3412.0,13148.0,21.9
+BTR-1003,Lion's Mane Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-02,102,2027-03,2027-07,4500,6,2000,8.0636,36286.2,15213.0,4450.0,18379.0,34.9
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-03,2027-07,6816,12,2400,5.2816,35999.39,21165.0,5160.0,25530.0,27.7
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-03,2027-07,6336,12,1800,5.2816,33464.22,18703.0,5677.0,22256.0,26.3
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2027-03,2027-06,1744,4,900,17.6232,30734.86,8805.0,4042.0,10429.0,22.2
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2027-03,2027-04,12504,24,4000,2.4192,30249.68,10168.0,5927.0,17237.0,9.8
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2027-03,2027-06,3288,6,1500,8.8116,28972.54,12769.0,4135.0,15712.0,17.8
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2027-03,2027-05,3712,8,1500,6.3364,23520.72,6472.0,3209.0,9268.0,13.0
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2027-03,2027-05,21864,24,6000,0.9709,21227.76,33151.0,15941.0,47902.0,11.4
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2027-03,2027-06,4152,12,2500,4.4058,18292.88,16234.0,4459.0,20248.0,17.1
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2027-03,2027-05,14280,24,6000,1.1242,16053.58,22912.0,10510.0,33542.0,12.3
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2027-03,2027-06,2460,12,1500,6.0842,14967.13,8488.0,1865.0,10746.0,17.3
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-04,2027-05,46578,6,10000,4.3,200285.4,36598.0,21872.0,68153.0,8.9
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-04,2027-05,19812,4,6000,8.9,176326.8,10814.0,6630.0,23365.0,7.2
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-04,2027-05,40872,6,8000,3.6,147139.2,24685.0,14922.0,45606.0,6.6
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,88,2027-04,2027-07,4900,2,1000,29.7916,145978.84,10607.0,2368.0,13416.0,22.5
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-04,2027-05,3009,1,600,32.5,97792.5,2206.0,1002.0,3926.0,8.5
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-04,2027-05,5040,4,1200,14.2,71568.0,3767.0,1918.0,6409.0,8.2
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,88,2027-04,2027-07,5360,4,1200,12.1684,65222.62,13711.0,4722.0,16776.0,25.1
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,110,2027-04,2027-08,11940,12,2400,5.2816,63062.3,30694.0,7199.0,37102.0,24.1
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,110,2027-04,2027-08,2412,4,800,20.1663,48641.12,8908.0,2357.0,10695.0,18.6
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,102,2027-04,2027-08,2856,4,1200,14.5888,41665.61,10935.0,3412.0,13148.0,21.4
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-04,2027-05,11970,6,8000,3.1,37107.0,6688.0,4064.0,14559.0,7.4
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2027-04,2027-05,9216,24,4000,2.4192,22295.35,10168.0,5927.0,17237.0,11.6
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-05,2027-06,35274,6,10000,4.3,151678.2,36598.0,21872.0,68153.0,10.2
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-05,2027-06,14992,4,6000,8.9,133428.8,10814.0,6630.0,23365.0,8.3
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-05,2027-06,31488,6,8000,3.6,113356.8,24685.0,14922.0,45606.0,7.6
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-05,2027-06,1946,1,600,32.5,63245.0,2206.0,1002.0,3926.0,10.3
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,35,2027-05,2027-07,14904,12,3000,3.8325,57119.58,23460.0,11697.0,33543.0,20.6
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,88,2027-05,2027-08,2660,4,900,17.6232,46877.71,8805.0,4042.0,10429.0,30.7
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-05,2027-06,3300,4,1200,14.2,46860.0,3767.0,1918.0,6409.0,9.8
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,88,2027-05,2027-08,5106,6,1500,8.8116,44992.03,12769.0,4135.0,15712.0,24.3
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,88,2027-05,2027-08,7680,12,2500,4.4058,33836.54,16234.0,4459.0,20248.0,22.2
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,35,2027-05,2027-07,4680,8,1500,6.3364,29654.35,6472.0,3209.0,9268.0,18.0
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-05,2027-06,9036,6,8000,3.1,28011.6,6688.0,4064.0,14559.0,8.5
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,88,2027-05,2027-08,4536,12,1500,6.0842,27597.93,8488.0,1865.0,10746.0,20.0
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,35,2027-05,2027-07,27576,24,6000,0.9709,26773.54,33151.0,15941.0,47902.0,15.8
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,35,2027-05,2027-07,17880,24,6000,1.1242,20100.7,22912.0,10510.0,33542.0,17.1
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-06,2027-07,25446,6,8000,3.6,91605.6,24685.0,14922.0,45606.0,8.4
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,18,2027-06,2027-07,11592,24,4000,2.4192,28043.37,10168.0,5927.0,17237.0,9.2
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,14,2027-07,2027-08,51330,6,10000,4.3,220719.0,36598.0,21872.0,68153.0,7.5
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,10,2027-07,2027-08,21776,4,6000,8.9,193806.4,10814.0,6630.0,23365.0,5.0
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,21,2027-07,2027-08,3029,1,600,32.5,98442.5,2206.0,1002.0,3926.0,6.8
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,14,2027-07,2027-08,21498,6,8000,3.6,77392.8,24685.0,14922.0,45606.0,9.2
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,21,2027-07,2027-08,5220,4,1200,14.2,74124.0,3767.0,1918.0,6409.0,6.2
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,10,2027-07,2027-08,13110,6,8000,3.1,40641.0,6688.0,4064.0,14559.0,5.4

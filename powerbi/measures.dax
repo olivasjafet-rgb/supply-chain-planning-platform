@@ -1,0 +1,80 @@
+// =============================================================================
+//  Measures -- Supply Chain Planning model
+//  Paste into a Power BI model built on the tables in outputs/powerbi/.
+//  Relationships (all single-direction, many-to-one from fact to dim):
+//     fact_plan[sku]        -> dim_product[sku]
+//     fact_plan[month]      -> dim_calendar[month]
+//     fact_allocation[sku]  -> dim_product[sku]
+//     fact_allocation[account] -> dim_location[account]
+//     dim_product[supplier_id] -> dim_supplier[supplier_id]
+// =============================================================================
+
+Forecast Units = SUM ( fact_plan[forecast_units] )
+
+Closing Inventory = SUM ( fact_plan[closing_value_usd] )
+
+Average Inventory = AVERAGEX ( VALUES ( dim_calendar[month] ), [Closing Inventory] )
+
+COGS = SUMX ( fact_plan, fact_plan[forecast_units] * fact_plan[unit_cost_usd] )
+
+Planned Purchases = SUM ( fact_plan[order_value_usd] )
+
+Inventory Turns =
+DIVIDE ( [COGS], [Average Inventory] )
+    * DIVIDE ( 12, DISTINCTCOUNT ( dim_calendar[month] ) )
+
+Weeks of Supply = DIVIDE ( [Closing Inventory], DIVIDE ( [COGS], 4.33 ) )
+
+Gross Margin =
+SUMX (
+    fact_plan,
+    fact_plan[forecast_units]
+        * ( RELATED ( dim_product[retail_price] ) * 0.65 - fact_plan[unit_cost_usd] )
+)
+
+GMROI = DIVIDE ( [Gross Margin], [Average Inventory] )
+
+Fill Rate =
+DIVIDE (
+    SUM ( fact_allocation[allocated_units] ),
+    SUM ( fact_allocation[requirement_units] )
+)
+
+Short Units = SUM ( fact_allocation[short_units] )
+
+Stockout Item-Months =
+CALCULATE ( COUNTROWS ( fact_plan ), fact_plan[stockout_units] > 0 )
+
+// -- Landed-cost scenario -----------------------------------------------------
+
+Receipt Saving = SUM ( fact_landed_cost[receipt_saving_usd] )
+
+COGS Saving = SUM ( fact_landed_cost[cogs_saving_usd] )
+
+Cumulative COGS Saving =
+CALCULATE (
+    [COGS Saving],
+    FILTER ( ALL ( dim_calendar ), dim_calendar[month] <= MAX ( dim_calendar[month] ) )
+)
+
+Cumulative Receipt Saving =
+CALCULATE (
+    [Receipt Saving],
+    FILTER ( ALL ( dim_calendar ), dim_calendar[month] <= MAX ( dim_calendar[month] ) )
+)
+
+P&L Realisation % =
+DIVIDE ( [Cumulative COGS Saving], [Cumulative Receipt Saving] )
+
+// -- Conditional formatting helpers ------------------------------------------
+
+WoS Status =
+VAR w = [Weeks of Supply]
+RETURN
+    SWITCH (
+        TRUE (),
+        ISBLANK ( w ), "No data",
+        w < 6,  "Thin cover",
+        w > 14, "Overstocked",
+        "Healthy"
+    )

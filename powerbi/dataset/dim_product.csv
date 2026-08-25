@@ -1,0 +1,27 @@
+sku,sku_name,division,category,subcategory,supplier_id,fob_unit_cost,retail_price,case_pack,moq_units,base_monthly_units,lead_time_days,lead_time_std_days,origin_expense_rate,sourcing_type,landed_unit_cost
+BTR-1001,Organic Mushroom Grow Kit - Oyster,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,6.4,21.99,6,3000,14500,95,12,0.058,Import,6.7712
+BTR-1002,Pink Oyster Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-01,6.85,24.99,6,2000,4200,95,12,0.058,Import,7.2473
+BTR-1003,Lion's Mane Mushroom Grow Kit,Indoor Growing,Mushroom Kits,Single Kits,SUP-02,7.6,26.99,6,2000,3100,102,15,0.061,Import,8.0636
+BTR-1004,Mushroom Grow Kit 2-Pack,Indoor Growing,Mushroom Kits,Multi-Packs,SUP-01,12.1,39.99,4,1500,2600,95,12,0.058,Import,12.8018
+BTR-1005,Mushroom Kit Holiday Gift Box,Indoor Growing,Mushroom Kits,Gifting,SUP-02,13.75,44.99,4,1200,1900,102,15,0.061,Import,14.5888
+BTR-1101,Water Garden 3-Gallon Aquaponics,Indoor Growing,Water Garden,Systems,SUP-03,28.4,99.99,2,1000,2350,88,11,0.049,Import,29.7916
+BTR-1102,Water Garden Refill & Seed Kit,Indoor Growing,Water Garden,Consumables,SUP-03,4.2,16.99,12,2500,3400,88,11,0.049,Import,4.4058
+BTR-1103,Self-Watering Countertop Grow Kit,Indoor Growing,Water Garden,Systems,SUP-04,18.9,64.99,4,800,1150,110,18,0.067,Import,20.1663
+BTR-1201,Windowsill Herb Kit - Basil,Indoor Growing,Herb Kits,Single Herb,SUP-04,4.95,17.99,12,2400,5600,110,18,0.067,Import,5.2816
+BTR-1202,Windowsill Herb Kit - Cilantro,Indoor Growing,Herb Kits,Single Herb,SUP-04,4.95,17.99,12,2400,3900,110,18,0.067,Import,5.2816
+BTR-1203,Windowsill Herb Kit - Mint,Indoor Growing,Herb Kits,Single Herb,SUP-04,4.95,17.99,12,1800,2700,110,18,0.067,Import,5.2816
+BTR-1204,Herb Garden Trio Gift Set,Indoor Growing,Herb Kits,Gifting,SUP-03,11.6,39.99,4,1200,2100,88,11,0.049,Import,12.1684
+BTR-1205,Microgreens Grow Kit,Indoor Growing,Herb Kits,Microgreens,SUP-03,5.8,19.99,12,1500,1750,88,11,0.049,Import,6.0842
+BTR-2001,Organic Seed Variety Pack - 12ct,Outdoor Gardening,Seeds,Variety Packs,SUP-05,3.75,14.99,12,3000,9800,35,6,0.022,Import,3.8325
+BTR-2002,Organic Heirloom Tomato Seeds,Outdoor Gardening,Seeds,Vegetable,SUP-05,0.95,4.99,24,6000,12400,35,6,0.022,Import,0.9709
+BTR-2003,Organic Culinary Herb Seed Pack,Outdoor Gardening,Seeds,Herb,SUP-05,1.1,5.49,24,6000,8600,35,6,0.022,Import,1.1242
+BTR-2004,Organic Wildflower Pollinator Mix,Outdoor Gardening,Seeds,Flower,SUP-09,2.4,9.99,24,4000,6300,18,4,0.008,Import,2.4192
+BTR-2005,Kids Garden Seed Starter Kit,Outdoor Gardening,Seeds,Kids,SUP-05,6.2,22.99,8,1500,2450,35,6,0.022,Import,6.3364
+BTR-2101,Organic Potting Mix 12qt,Outdoor Gardening,Soils & Media,Potting,SUP-06,4.3,13.99,6,10000,26500,14,3,0.0,Domestic,4.3
+BTR-2102,Organic Seed Starting Mix 8qt,Outdoor Gardening,Soils & Media,Starting,SUP-06,3.6,11.99,6,8000,14200,14,3,0.0,Domestic,3.6
+BTR-2103,Organic Raised Bed Mix 1.5 cu ft,Outdoor Gardening,Soils & Media,Raised Bed,SUP-07,8.9,24.99,4,6000,11800,10,2,0.0,Domestic,8.9
+BTR-2104,Organic Compost Blend 8qt,Outdoor Gardening,Soils & Media,Amendments,SUP-07,3.1,10.49,6,8000,7400,10,2,0.0,Domestic,3.1
+BTR-2201,Raised Bed Starter Kit,Outdoor Gardening,Garden Kits,Beds,SUP-08,32.5,109.99,1,600,1250,21,4,0.0,Domestic,32.5
+BTR-2202,Windowsill Planter Box,Outdoor Gardening,Garden Kits,Planters,SUP-08,14.2,44.99,4,1200,1600,21,4,0.0,Domestic,14.2
+BTR-2203,Kids Pizza Garden Grow Kit,Outdoor Gardening,Garden Kits,Kids,SUP-03,8.4,29.99,6,1500,2050,88,11,0.049,Import,8.8116
+BTR-2204,Garden Gift Set - Grow Your Own,Outdoor Gardening,Garden Kits,Gifting,SUP-03,16.8,54.99,4,900,1400,88,11,0.049,Import,17.6232

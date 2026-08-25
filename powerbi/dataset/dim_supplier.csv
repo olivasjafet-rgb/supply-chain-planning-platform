@@ -1,0 +1,10 @@
+supplier_id,origin_country,lead_time_days,lead_time_std_days,origin_expense_rate,payment_terms,sourcing_type,purchase_value_usd,origin_expense_usd,orders,empirical_rate,rate_source,effective_rate,applies
+SUP-01,China,95,12,0.058,30% deposit / 70% on B/L,Import,688921.25,39957.43,9,0.05799999637113821,empirical,0.05799999637113821,True
+SUP-02,China,102,15,0.061,T/T 30 days,Import,170473.8,10398.91,6,0.061000048101233155,empirical,0.061000048101233155,True
+SUP-03,Vietnam,88,11,0.049,L/C at sight,Import,691688.2,33892.7,16,0.04899996848290892,empirical,0.04899996848290892,True
+SUP-04,India,110,18,0.067,T/T 45 days,Import,433372.05,29035.92,12,0.06699998303997685,empirical,0.06699998303997685,True
+SUP-05,Mexico,35,6,0.022,Net 30,Import,117223.15,2578.91,7,0.022000005971516717,empirical,0.022000005971516717,True
+SUP-06,United States,14,3,0.0,Net 30,Domestic,146790.0,0.0,1,0.0,empirical,0.0,False
+SUP-07,United States,10,2,0.0,Net 45,Domestic,147401.3,0.0,2,0.0,empirical,0.0,False
+SUP-08,United States,21,4,0.0,Net 30,Domestic,72396.2,0.0,2,0.0,empirical,0.0,False
+SUP-09,Canada,18,4,0.008,Net 30,Import,9405.6,75.24,1,0.007999489665731052,empirical,0.007999489665731052,True

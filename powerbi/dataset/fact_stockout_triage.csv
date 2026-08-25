@@ -1,0 +1,7 @@
+sku,month,horizon_month,lead_time_days,lead_time_months,stockout_units,classification,recommended_action
+BTR-1001,2026-12,3,95,4,3895.0,Locked (inside frozen window),Expedite / air freight / shape demand
+BTR-1001,2026-11,2,95,4,1369.0,Locked (inside frozen window),Expedite / air freight / shape demand
+BTR-1103,2026-09,0,110,4,654.0,Locked (inside frozen window),Expedite / air freight / shape demand
+BTR-1003,2026-12,3,102,4,635.0,Locked (inside frozen window),Expedite / air freight / shape demand
+BTR-1103,2026-10,1,110,4,507.0,Locked (inside frozen window),Expedite / air freight / shape demand
+BTR-1005,2026-12,3,102,4,327.0,Locked (inside frozen window),Expedite / air freight / shape demand
