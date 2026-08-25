@@ -18,3 +18,7 @@ presentation/my_prep.html
 
 # Intermediate PbixProj folder produced while building the template.
 powerbi/_pbixproj/
+
+# The ported original MRP (English demo). Local-only on purpose: its db.py
+# still carries internal system names that must not reach a public repository.
+mrp-demo/
