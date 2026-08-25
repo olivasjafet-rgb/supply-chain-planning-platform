@@ -35,6 +35,8 @@ from src import allocation as alloc  # noqa: E402
 from src import dataio, forecast, kpis, landed_cost, replenishment  # noqa: E402
 from src.config import load_config  # noqa: E402
 
+import control_tower  # noqa: E402  (lives in app/, the script dir)
+
 st.set_page_config(page_title="Supply Chain Planning Workbench", layout="wide", page_icon=":seedling:")
 
 # -- palette -----------------------------------------------------------------
@@ -204,7 +206,7 @@ st.markdown(
 
 tabs = st.tabs([
     "Executive", "Demand Plan", "Replenishment", "Service & Allocation",
-    "Landed Cost", "How it's built",
+    "Landed Cost", "Control Tower", "How it's built",
 ])
 
 
@@ -540,7 +542,7 @@ approaches its floor asymptotically and never quite lands on it.
 # =============================================================================
 # 6. HOW IT'S BUILT
 # =============================================================================
-with tabs[5]:
+with tabs[6]:
     st.subheader("This is a Python application, not a BI report")
     st.markdown(
         """
@@ -628,3 +630,10 @@ running it, measuring it, and not accepting the first plausible answer — which
 is the part of the workflow the AI accelerates most.
         """
     )
+
+
+# =============================================================================
+# 7. CONTROL TOWER — mirror of the production Direct Sales report
+# =============================================================================
+with tabs[5]:
+    control_tower.render()
