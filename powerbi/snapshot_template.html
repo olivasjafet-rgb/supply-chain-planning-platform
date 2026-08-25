@@ -1,0 +1,435 @@
+<title>Direct Sales Inventory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#F1F4F1; --surface:#FFFFFF; --surface-2:#F4F6F3; --rule:#E1E5E0;
+    --rule-strong:#C4CBC3; --ink:#182019; --ink-2:#3C463D; --muted:#6E786F;
+    --moss:#3C8A50; --moss-deep:#2C6E3E;
+    --good:#0ca30c; --warning:#e8a20c; --serious:#ec835a; --critical:#d03b3b;
+    --neutral:#7C8894; --navy:#34495E;
+    --display:"Newsreader",Georgia,serif;
+    --body:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#10140F; --surface:#181D17; --surface-2:#20261F; --rule:#2B322A;
+    --rule-strong:#47503F; --ink:#EAEDE6; --ink-2:#C2C8BD; --muted:#8A948A;
+    --moss:#3C8A50; --moss-deep:#57A96B;
+    --good:#3fc23f; --warning:#e8b23c; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --navy:#7f9cb8;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#10140F; --surface:#181D17; --surface-2:#20261F; --rule:#2B322A;
+    --rule-strong:#47503F; --ink:#EAEDE6; --ink-2:#C2C8BD; --muted:#8A948A;
+    --moss:#3C8A50; --moss-deep:#57A96B;
+    --good:#3fc23f; --warning:#e8b23c; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --navy:#7f9cb8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+       font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 .9rem 3rem}
+
+  .topbar{background:var(--moss);color:#fff;border-radius:0 0 10px 10px;
+          padding:.8rem 1.1rem;display:flex;flex-wrap:wrap;gap:.8rem 1.3rem;
+          align-items:center;margin-bottom:1rem}
+  .brand{font-family:var(--display);font-size:1.3rem;font-weight:500}
+  .brand small{display:block;font-family:var(--mono);font-size:.58rem;
+               letter-spacing:.15em;text-transform:uppercase;opacity:.85;margin-top:.12rem}
+  .scope{background:#E8A20C;color:#1c1c14;font-weight:600;font-size:.82rem;
+         padding:.34rem 1.4rem;border-radius:999px}
+  .topbar .f{display:flex;flex-direction:column;gap:.16rem}
+  .topbar .f label{font-family:var(--mono);font-size:.57rem;letter-spacing:.1em;
+                   text-transform:uppercase;opacity:.85}
+  .topbar select{font-size:.8rem;padding:.28rem .45rem;background:#fff;color:#182019;
+                 border:0;border-radius:4px;min-width:130px;font-family:var(--body)}
+  .topbar select:focus-visible{outline:2px solid #fff;outline-offset:1px}
+  .stamp{margin-left:auto;text-align:right;font-family:var(--mono);font-size:.66rem;
+         opacity:.92;line-height:1.5}
+  .resetb{font-family:var(--mono);font-size:.62rem;letter-spacing:.07em;
+          text-transform:uppercase;background:rgba(255,255,255,.15);
+          border:1px solid rgba(255,255,255,.45);color:#fff;padding:.32rem .6rem;
+          border-radius:4px;cursor:pointer}
+  .resetb:hover{background:rgba(255,255,255,.28)}
+
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+        padding:.85rem 1rem;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{font-size:1rem;font-weight:600;margin:0 0 .55rem;display:flex;
+           align-items:center;gap:.45rem;font-family:var(--body)}
+  .card h2::before{content:"";width:4px;height:16px;background:var(--moss);
+                   border-radius:2px}
+  .row{display:grid;gap:.9rem;margin-bottom:.9rem}
+  .r-top{grid-template-columns:1fr 1fr 1.05fr}
+  .r-mid{grid-template-columns:2.05fr 1fr}
+  @media(max-width:1100px){.r-top,.r-mid{grid-template-columns:1fr}}
+
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .donutrow{display:flex;align-items:center;gap:.8rem}
+  .donutrow .dwrap{flex:0 0 150px}
+  .legend{display:flex;flex-direction:column;gap:.34rem;font-size:.78rem;color:var(--ink-2)}
+  .legend span{display:flex;align-items:center;gap:.38rem}
+  .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;display:inline-block}
+
+  .prio .it{display:flex;align-items:center;gap:.6rem;padding:.6rem .15rem;
+            border-bottom:1px solid var(--rule)}
+  .prio .it:last-child{border-bottom:none}
+  .prio .dot{width:13px;height:13px}
+  .prio .txt{flex:1;min-width:0}
+  .prio .t1{font-weight:600;font-size:.94rem}
+  .prio .t2{font-size:.71rem;color:var(--muted)}
+  .prio .v{font-family:var(--mono);font-size:1.28rem;font-weight:600;
+           font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  table{border-collapse:collapse;width:100%;font-size:.77rem}
+  th,td{padding:.32rem .5rem;border-bottom:1px solid var(--rule);text-align:left;
+        white-space:nowrap}
+  thead th{background:var(--moss);color:#fff;font-size:.63rem;letter-spacing:.05em;
+           text-transform:uppercase;font-weight:600;position:sticky;top:0;z-index:2;
+           border-bottom:none}
+  thead th:first-child{border-radius:6px 0 0 0}
+  thead th:last-child{border-radius:0 6px 0 0}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:var(--surface-2)}
+  tr.lvl0>td{font-weight:600}
+  tr.lvl1>td:first-child{padding-left:1.5rem}
+  tr.lvl2>td:first-child{padding-left:3rem;color:var(--ink-2)}
+  tr.grp>td{font-weight:600;background:var(--surface-2)}
+  tr.sub>td:first-child{padding-left:1.6rem}
+  tr.tot>td{border-top:2px solid var(--rule-strong);font-weight:600;
+            background:var(--surface-2)}
+  .tw{max-height:430px;overflow:auto;border:1px solid var(--rule);border-radius:8px}
+  .exp{display:inline-flex;align-items:center;justify-content:center;width:14px;
+       height:14px;border:1px solid var(--rule-strong);border-radius:3px;
+       font-family:var(--mono);font-size:.7rem;margin-right:.4rem;cursor:pointer;
+       color:var(--muted);background:var(--surface);user-select:none;vertical-align:-1px}
+  .exp:hover{border-color:var(--moss);color:var(--moss)}
+  .leaf{display:inline-block;width:14px;margin-right:.4rem}
+  .neg{color:var(--critical)}
+
+  .exstat{display:flex;align-items:center;gap:.9rem}
+  .exstat .dwrap{flex:0 0 120px}
+  .exstat .big{font-family:var(--mono);font-size:1.25rem;font-weight:600}
+  .exstat .s{font-size:.72rem;color:var(--muted);line-height:1.4}
+  .kvrow{display:flex;justify-content:space-between;font-size:.78rem;
+         padding:.28rem 0;border-bottom:1px dashed var(--rule)}
+  .kvrow:last-child{border-bottom:none}
+  .kvrow b{font-family:var(--mono)}
+
+  .ba{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--muted);margin:.6rem 0 .25rem}
+  .miniblock{border:1px solid var(--rule);border-radius:8px;padding:.5rem .7rem;
+             margin-bottom:.4rem;background:var(--surface-2)}
+  .bar{height:8px;background:var(--rule);border-radius:999px;overflow:hidden;
+       margin-top:.3rem}
+  .bar>i{display:block;height:100%;background:var(--moss)}
+
+  .tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;
+       background:var(--ink);color:var(--ground);font-family:var(--mono);
+       font-size:.7rem;padding:.4rem .58rem;border-radius:4px;z-index:60;
+       max-width:250px;line-height:1.45}
+  .tip.on{opacity:1}
+  footer{margin-top:1rem;font-size:.73rem;color:var(--muted);max-width:90ch}
+  .empty{padding:1.4rem;text-align:center;color:var(--muted);font-size:.8rem}
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Direct Sales Inventory
+      <small>Simulated catalogue &middot; portfolio demo</small></div>
+    <span class="scope">Global</span>
+    <div class="f"><label for="fDiv">Division</label><select id="fDiv"></select></div>
+    <div class="f"><label for="fCat">Category</label><select id="fCat"></select></div>
+    <div class="f"><label for="fAbc">ABC</label><select id="fAbc"></select></div>
+    <button class="resetb" id="reset">Reset</button>
+    <div class="stamp">Snapshot date<br><b id="stamp"></b></div>
+  </div>
+
+  <div class="row r-top">
+    <div class="card">
+      <h2>Available &mdash; composition</h2>
+      <div class="donutrow">
+        <div class="dwrap"><div id="dAvail"></div></div>
+        <div class="legend" id="lAvail"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Below minimum &mdash; composition</h2>
+      <div class="donutrow">
+        <div class="dwrap"><div id="dShort"></div></div>
+        <div class="legend" id="lShort"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Shortfall priority</h2>
+      <div class="prio" id="prio"></div>
+    </div>
+  </div>
+
+  <div class="row r-mid">
+    <div class="card">
+      <h2>Coverage matrix</h2>
+      <div class="tw"><table id="matrix"></table></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:.9rem">
+        <h2>Excess analysis</h2>
+        <div class="exstat">
+          <div class="dwrap"><div id="dExcess"></div></div>
+          <div>
+            <div class="kvrow"><span><span class="dot" style="background:var(--critical)"></span> No active sales</span><b id="exNo"></b></div>
+            <div class="kvrow"><span><span class="dot" style="background:var(--good)"></span> With active sales</span><b id="exYes"></b></div>
+            <div class="s" id="exNote" style="margin-top:.4rem"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Detailed priority &mdash; DC scenario</h2>
+        <div class="ba">Before</div>
+        <div class="miniblock" id="pbBefore"></div>
+        <div class="miniblock" id="pbDC"></div>
+        <div class="ba">After DC transfers</div>
+        <div class="miniblock" id="pbAfter"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Availability analysis</h2>
+    <div class="tw" style="max-height:none"><table id="avail"></table></div>
+  </div>
+
+  <footer>
+    All figures simulated from a fixed seed &mdash; no data from any employer.
+    This page mirrors the layout of a production Power BI report (12 tables, five
+    source systems, documented separately); classification: below the minimum, a
+    DC covering &ge;60% of the gap routes to <b>Transfer from DC</b>, inbound
+    covering it routes to <b>In transit</b>, and only the remainder is <b>Buy</b>.
+  </footer>
+</div>
+
+<div class="tip" id="tip"></div>
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+(function(){
+"use strict";
+const raw=JSON.parse(document.getElementById('payload').textContent);
+const C=raw.cols, ROWS=raw.rows.map(r=>{const o={};C.forEach((c,i)=>o[c]=r[i]);return o;});
+const SHORT=["Buy","Transfer from DC","In transit"];
+const AVAIL=["In range","Excess","Made to order"];
+const CV={"Buy":"--critical","Transfer from DC":"--good","In transit":"--warning",
+          "In range":"--navy","Excess":"--serious","Made to order":"--neutral"};
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const col=s=>cssv(CV[s]);
+const k$=v=>"$"+(Math.abs(v)/1e3).toFixed(1)+"k";
+const num=v=>Math.round(v).toLocaleString("en-US");
+const sum=(rs,f)=>rs.reduce((a,r)=>a+r[f],0);
+
+document.getElementById('stamp').textContent=new Date().toLocaleDateString("en-US",
+  {day:"2-digit",month:"short",year:"numeric"});
+
+const tip=document.getElementById('tip');
+const showTip=(e,h)=>{tip.innerHTML=h;tip.classList.add('on');
+  const p=12;let x=e.clientX+p,y=e.clientY+p;const r=tip.getBoundingClientRect();
+  if(x+r.width>innerWidth-8)x=e.clientX-r.width-p;
+  if(y+r.height>innerHeight-8)y=e.clientY-r.height-p;
+  tip.style.left=x+'px';tip.style.top=y+'px';};
+const hideTip=()=>tip.classList.remove('on');
+
+const F={division:'',category:'',abc:''};
+const uniq=k=>[...new Set(ROWS.map(r=>r[k]))].sort();
+function fill(id,key,lab){const el=document.getElementById(id);
+  el.innerHTML=`<option value="">All</option>`+uniq(key).map(v=>`<option>${v}</option>`).join('');
+  el.addEventListener('change',()=>{F[key]=el.value;render();});}
+fill('fDiv','division');fill('fCat','category');fill('fAbc','abc');
+document.getElementById('reset').addEventListener('click',()=>{
+  Object.keys(F).forEach(x=>F[x]='');
+  ['fDiv','fCat','fAbc'].forEach(i=>document.getElementById(i).value='');render();});
+const apply=()=>ROWS.filter(r=>(!F.division||r.division===F.division)&&
+  (!F.category||r.category===F.category)&&(!F.abc||r.abc===F.abc));
+
+function donut(hostId,parts,total,centre,legId){
+  const host=document.getElementById(hostId);
+  if(!total){host.innerHTML='<div class="empty">No rows.</div>';
+    if(legId)document.getElementById(legId).innerHTML='';return;}
+  const S=150,cx=S/2,cy=S/2,R=57,r=36;let a0=-Math.PI/2;
+  let s=`<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="${centre.label}">`;
+  parts.forEach(p=>{if(!p.v)return;
+    const f=p.v/total,a1=a0+f*Math.PI*2,big=f>.5?1:0;
+    const P=(rad,a)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+    const[x1,y1]=P(R,a0),[x2,y2]=P(R,a1),[x3,y3]=P(r,a1),[x4,y4]=P(r,a0);
+    s+=`<path d="M${x1},${y1} A${R},${R} 0 ${big},1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${big},0 ${x4},${y4} Z"
+        fill="${p.c}" stroke="var(--surface)" stroke-width="2" class="seg"
+        data-l="${p.l}" data-v="${p.txt||num(p.v)}" data-p="${(f*100).toFixed(0)}" style="cursor:default"/>`;
+    a0=a1;});
+  s+=`<text x="${cx}" y="${cy-1}" text-anchor="middle" font-family="var(--mono)"
+       font-size="15" font-weight="600" fill="var(--ink)">${centre.v}</text>
+      <text x="${cx}" y="${cy+13}" text-anchor="middle" font-size="8.6"
+       fill="var(--muted)" font-family="var(--body)">${centre.label}</text></svg>`;
+  host.innerHTML=s;
+  host.querySelectorAll('.seg').forEach(el=>{
+    el.addEventListener('mousemove',e=>showTip(e,`<b>${el.dataset.l}</b><br>${el.dataset.v} (${el.dataset.p}%)`));
+    el.addEventListener('mouseleave',hideTip);});
+  if(legId)document.getElementById(legId).innerHTML=parts.filter(p=>p.v)
+    .map(p=>`<span><span class="dot" style="background:${p.c}"></span>${p.l}
+      &nbsp;<b style="font-family:var(--mono)">${p.txt||num(p.v)}</b>
+      <span style="color:var(--muted)">(${(p.v/total*100).toFixed(0)}%)</span></span>`).join('');
+}
+
+function prio(d){
+  const items=[
+    {s:"Transfer from DC",t2:"DC covers ≥ 60% of the gap"},
+    {s:"Buy",t2:"No cover anywhere"},
+    {s:"In transit",t2:"Inbound already covers it"}];
+  document.getElementById('prio').innerHTML=items.map(x=>{
+    const rs=d.filter(r=>r.status===x.s);
+    return `<div class="it"><span class="dot" style="background:${col(x.s)}"></span>
+      <span class="txt"><span class="t1">${x.s}</span><br>
+      <span class="t2">${x.t2} &middot; ${rs.length} SKUs</span></span>
+      <span class="v" style="color:${col(x.s)}">${k$(sum(rs,'gap'))}</span></div>`;}).join('');
+}
+
+const open={};
+function met(rs){
+  const o={n:rs.length,avail:sum(rs,'onHand'),req:sum(rs,'reqMin'),
+           gap:sum(rs.filter(r=>SHORT.includes(r.status)),'gap'),
+           exc:sum(rs,'excess'),avg4m:sum(rs,'avg4m')};
+  o.var=o.avail-o.req;
+  ["Buy","Transfer from DC","In transit","In range","Excess","Made to order"]
+    .forEach(s=>o[s]=rs.filter(r=>r.status===s).length);
+  o.cov=o.avg4m?o.avail/o.avg4m:null;                 // months of cover vs avg 4M
+  o.pct=o.req?o.avail/o.req:null;
+  return o;
+}
+function mrow(label,lvl,m,key,kids){
+  const t=kids?`<span class="exp" data-k="${key}">${open[key]?'&minus;':'+'}</span>`
+              :`<span class="leaf"></span>`;
+  return `<tr class="lvl${lvl}"><td>${t}${label}</td>
+    <td class="n">${num(m.n)}</td>
+    <td class="n">${k$(m.avail)}</td><td class="n">${k$(m.req)}</td>
+    <td class="n ${m.var<0?'neg':''}">${k$(m.var)}</td>
+    <td class="n ${m.gap?'neg':''}">${m.gap?k$(m.gap):'&mdash;'}</td>
+    <td class="n">${m.exc?k$(m.exc):'&mdash;'}</td>
+    <td class="n">${m["Made to order"]||'&mdash;'}</td>
+    <td class="n">${m["In range"]||'&mdash;'}</td>
+    <td class="n">${m.cov===null?'&mdash;':m.cov.toFixed(1)}</td>
+    <td class="n">${k$(m.avg4m)}</td>
+    <td class="n">${m.pct===null?'&mdash;':(m.pct*100).toFixed(1)+'%'}</td></tr>`;
+}
+function matrix(d){
+  const el=document.getElementById('matrix');
+  if(!d.length){el.innerHTML='<tbody><tr><td class="empty">No rows match.</td></tr></tbody>';return;}
+  let b='';
+  uniqIn(d,'division').forEach(dv=>{
+    const dr=d.filter(r=>r.division===dv),kd='d|'+dv;
+    b+=mrow(dv,0,met(dr),kd,true);
+    if(open[kd]) uniqIn(dr,'category').forEach(ct=>{
+      const cr=dr.filter(r=>r.category===ct),kc='c|'+dv+'|'+ct;
+      b+=mrow(ct,1,met(cr),kc,true);
+      if(open[kc]) cr.slice().sort((a,b2)=>b2.gap-a.gap).forEach(r=>{
+        b+=mrow(r.product+' <span style="color:var(--muted)">'+r.sku+'</span>',
+                2,met([r]),'',false);});
+    });
+  });
+  b+=mrow('<b>Total</b>',0,met(d),'',false).replace('class="lvl0"','class="lvl0 tot"');
+  el.innerHTML=`<thead><tr><th>Division / Category / SKU</th><th class="n">SKUs</th>
+    <th class="n">Avail $</th><th class="n">Req $</th><th class="n">Var</th>
+    <th class="n">Shortfall</th><th class="n">Excess</th><th class="n">MTO</th>
+    <th class="n">In range</th><th class="n">Cover (mo)</th>
+    <th class="n">Avg cost 4M</th><th class="n">% Avail</th></tr></thead><tbody>${b}</tbody>`;
+  el.querySelectorAll('.exp').forEach(x=>x.addEventListener('click',()=>{
+    open[x.dataset.k]=!open[x.dataset.k];matrix(apply());}));
+}
+const uniqIn=(rs,k)=>[...new Set(rs.map(r=>r[k]))].sort();
+
+function excess(d){
+  const ex=d.filter(r=>r.status==="Excess");
+  const no=sum(ex.filter(r=>!r.active),'excess'), yes=sum(ex.filter(r=>r.active),'excess');
+  donut('dExcess',
+    [{l:"No active sales",v:no,c:cssv('--critical'),txt:k$(no)},
+     {l:"With active sales",v:yes,c:cssv('--good'),txt:k$(yes)}],
+    no+yes,{v:k$(no+yes),label:"excess"},null);
+  document.getElementById('exNo').textContent=k$(no);
+  document.getElementById('exYes').textContent=k$(yes);
+  const p=no+yes?no/(no+yes):0;
+  document.getElementById('exNote').innerHTML=
+    `<b>${(p*100).toFixed(0)}%</b> of the excess has no rotation &mdash; it will not
+     sell itself down. The rest has movement and can be reduced.`;
+}
+
+function scenario(d){
+  const short=d.filter(r=>SHORT.includes(r.status));
+  const avail=d.filter(r=>AVAIL.includes(r.status));
+  const dcApp=sum(short,'dc')>sum(short,'gap')?sum(short,'gap'):sum(short,'dc');
+  const rec=short.filter(r=>r.dc>=r.gap&&r.gap>0);
+  const recG=sum(rec,'gap');
+  const t=d.length||1;
+  const blk=(id,rows)=>{document.getElementById(id).innerHTML=rows;};
+  blk('pbBefore',
+    `<div class="kvrow"><span><span class="dot" style="background:var(--critical)"></span> Shortfall</span><b>${short.length} SKUs &middot; ${k$(sum(short,'gap'))}</b></div>
+     <div class="kvrow"><span><span class="dot" style="background:var(--good)"></span> Available</span><b>${avail.length} SKUs (${(avail.length/t*100).toFixed(0)}%)</b></div>`);
+  const cov=sum(short,'gap')?dcApp/sum(short,'gap'):0;
+  blk('pbDC',
+    `<div class="kvrow"><span>DC applicable $</span><b style="color:var(--moss-deep)">${k$(dcApp)}</b></div>
+     <div class="bar"><i style="width:${Math.min(cov*100,100).toFixed(0)}%"></i></div>
+     <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">${(cov*100).toFixed(0)}% of the shortfall is coverable from the DC</div>`);
+  blk('pbAfter',
+    `<div class="kvrow"><span><span class="dot" style="background:var(--critical)"></span> Shortfall</span><b>${short.length-rec.length} SKUs &middot; ${k$(sum(short,'gap')-recG)}</b></div>
+     <div class="kvrow"><span><span class="dot" style="background:var(--good)"></span> Available</span><b>${avail.length+rec.length} SKUs (${((avail.length+rec.length)/t*100).toFixed(0)}%)</b></div>
+     <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem">${rec.length} SKUs recovered with a transfer &mdash; no purchase needed</div>`);
+}
+
+function availTable(d){
+  const el=document.getElementById('avail');
+  if(!d.length){el.innerHTML='<tbody><tr><td class="empty">No rows match.</td></tr></tbody>';return;}
+  const t=d.length;
+  const row=(cls,dotc,label,rs)=>{
+    const gap=sum(rs,'gap');
+    const dcA=Math.min(sum(rs,'dc'),gap), trA=Math.min(sum(rs,'transit'),gap);
+    const rec=rs.filter(r=>r.dc>=r.gap&&r.gap>0).length;
+    return `<tr class="${cls}"><td>${dotc?`<span class="dot" style="background:${dotc};margin-right:.4rem"></span>`:''}${label}</td>
+      <td class="n">${rs.length}</td><td class="n">${(rs.length/t*100).toFixed(0)}%</td>
+      <td class="n ${gap?'neg':''}">${gap?k$(gap):'&mdash;'}</td>
+      <td class="n">${gap?k$(dcA):'&mdash;'}</td><td class="n">${gap?k$(trA):'&mdash;'}</td>
+      <td class="n">${gap?(dcA/gap*100).toFixed(1)+'%':'&mdash;'}</td>
+      <td class="n">${gap?(trA/gap*100).toFixed(1)+'%':'&mdash;'}</td>
+      <td class="n">${rec||'&mdash;'}</td></tr>`;};
+  const S=s=>d.filter(r=>r.status===s);
+  const short=d.filter(r=>SHORT.includes(r.status)), av=d.filter(r=>AVAIL.includes(r.status));
+  el.innerHTML=`<thead><tr><th>Supply status</th><th class="n">SKUs</th>
+    <th class="n">% share</th><th class="n">Gap $</th><th class="n">DC applicable $</th>
+    <th class="n">Transit applicable $</th><th class="n">% DC covers</th>
+    <th class="n">% transit covers</th><th class="n">SKUs recovered w/ transfer</th></tr></thead><tbody>`+
+    row('grp','', '<b>Shortfall</b>',short)+
+    row('sub',col('Buy'),'Buy',S('Buy'))+
+    row('sub',col('Transfer from DC'),'Transfer from DC',S('Transfer from DC'))+
+    row('sub',col('In transit'),'In transit',S('In transit'))+
+    row('grp','','<b>Available</b>',av)+
+    row('sub',col('Made to order'),'Made to order',S('Made to order'))+
+    row('sub',col('Excess'),'Excess',S('Excess'))+
+    row('sub',col('In range'),'In range',S('In range'))+
+    row('tot','','<b>Total</b>',d)+`</tbody>`;
+}
+
+function render(){
+  const d=apply();
+  const av=d.filter(r=>AVAIL.includes(r.status));
+  donut('dAvail',
+    [{l:"In range",v:av.filter(r=>r.status==="In range").length,c:col("In range")},
+     {l:"Excess",v:av.filter(r=>r.status==="Excess").length,c:col("Excess")},
+     {l:"Made to order",v:av.filter(r=>r.status==="Made to order").length,c:col("Made to order")}],
+    av.length,{v:num(av.length),label:"available"},'lAvail');
+  const sh=d.filter(r=>SHORT.includes(r.status));
+  donut('dShort',
+    [{l:"Transfer from DC",v:sh.filter(r=>r.status==="Transfer from DC").length,c:col("Transfer from DC")},
+     {l:"Buy",v:sh.filter(r=>r.status==="Buy").length,c:col("Buy")},
+     {l:"In transit",v:sh.filter(r=>r.status==="In transit").length,c:col("In transit")}],
+    sh.length,{v:num(sh.length),label:"below min"},'lShort');
+  prio(d);matrix(d);excess(d);scenario(d);availTable(d);
+}
+render();
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',render);
+})();
+</script>
