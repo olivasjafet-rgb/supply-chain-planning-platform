@@ -1,0 +1,414 @@
+<title>Replenishment Control Tower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#F4F6F4; --surface:#FFFFFF; --surface-2:#F2F1EB; --rule:#E2E4E0;
+    --rule-strong:#C6CAC5; --ink:#17211C; --ink-2:#3D4842; --muted:#6E7671;
+    --moss:#2F7D4F; --moss-deep:#1F5F3A; --band:#E8F0EA;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+    --neutral:#7C8894; --grid:#EAECE8;
+    --display:"Newsreader",Georgia,serif;
+    --body:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#11150F; --surface:#191E17; --surface-2:#212720; --rule:#2C332A;
+    --rule-strong:#48513f; --ink:#EBEDE6; --ink-2:#C3C8BE; --muted:#8B948A;
+    --moss:#8FBF9F; --moss-deep:#A9D2B6; --band:#1E2A21;
+    --good:#3fc23f; --warning:#fab219; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --grid:#252C24;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#11150F; --surface:#191E17; --surface-2:#212720; --rule:#2C332A;
+    --rule-strong:#48513f; --ink:#EBEDE6; --ink-2:#C3C8BE; --muted:#8B948A;
+    --moss:#8FBF9F; --moss-deep:#A9D2B6; --band:#1E2A21;
+    --good:#3fc23f; --warning:#fab219; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --grid:#252C24;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+       font-size:14.5px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1460px;margin:0 auto;padding:0 1rem 3rem}
+
+  /* header bar, in the spirit of the production report */
+  .topbar{background:var(--moss);color:#fff;padding:.85rem 1.15rem;display:flex;
+          flex-wrap:wrap;gap:.9rem 1.4rem;align-items:center;margin:0 -1rem 1.1rem}
+  .brand{font-family:var(--display);font-size:1.32rem;font-weight:500;letter-spacing:-.01em}
+  .brand small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;
+               text-transform:uppercase;opacity:.82;font-weight:400;margin-top:.1rem}
+  .topbar .f{display:flex;flex-direction:column;gap:.18rem}
+  .topbar .f label{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;
+                   text-transform:uppercase;opacity:.85}
+  .topbar select{font-family:var(--body);font-size:.8rem;padding:.28rem .45rem;
+                 background:#fff;color:#17211C;border:0;border-radius:3px;min-width:126px}
+  .topbar select:focus-visible{outline:2px solid #fff;outline-offset:1px}
+  .spacer{margin-left:auto;text-align:right;font-family:var(--mono);font-size:.66rem;
+          letter-spacing:.05em;opacity:.9;line-height:1.5}
+  .resetb{font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;
+          background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:#fff;
+          padding:.34rem .6rem;border-radius:3px;cursor:pointer}
+  .resetb:hover{background:rgba(255,255,255,.28)}
+
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;
+        padding:.85rem 1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .card h2{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 .1rem;
+           letter-spacing:-.01em;border-left:3px solid var(--moss);padding-left:.5rem}
+  .card p.cap{font-size:.75rem;color:var(--muted);margin:.3rem 0 .7rem;max-width:62ch}
+
+  .row{display:grid;gap:.9rem;margin-bottom:.9rem}
+  .r2{grid-template-columns:1fr 1fr}
+  .r-main{grid-template-columns:2.1fr 1fr}
+  @media(max-width:1080px){.r2,.r-main{grid-template-columns:1fr}}
+
+  /* priority panel */
+  .prio{display:flex;flex-direction:column;gap:.1rem}
+  .prio .it{display:flex;align-items:center;gap:.6rem;padding:.62rem .2rem;
+            border-bottom:1px solid var(--rule)}
+  .prio .it:last-child{border-bottom:none}
+  .prio .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto}
+  .prio .txt{flex:1;min-width:0}
+  .prio .t1{font-weight:600;font-size:.95rem;line-height:1.2}
+  .prio .t2{font-size:.72rem;color:var(--muted)}
+  .prio .v{font-family:var(--mono);font-size:1.2rem;font-weight:600;
+           font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem;
+        margin-bottom:.9rem}
+  .kpi{background:var(--surface);border:1px solid var(--rule);border-radius:6px;
+       padding:.7rem .85rem}
+  .kpi .lab{font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:.32rem}
+  .kpi .val{font-family:var(--mono);font-size:1.42rem;font-weight:600;letter-spacing:-.02em;
+            font-variant-numeric:tabular-nums;margin-top:.18rem;display:block}
+  .kpi .note{font-size:.68rem;color:var(--muted)}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;display:inline-block}
+
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .legend{display:flex;flex-wrap:wrap;gap:.35rem .9rem;margin-top:.5rem;
+          font-size:.74rem;color:var(--ink-2)}
+  .legend span{display:flex;align-items:center;gap:.32rem}
+
+  table{border-collapse:collapse;width:100%;font-size:.78rem}
+  th,td{padding:.34rem .5rem;border-bottom:1px solid var(--rule);text-align:left;
+        white-space:nowrap}
+  thead th{background:var(--moss);color:#fff;font-size:.65rem;letter-spacing:.05em;
+           text-transform:uppercase;font-weight:600;position:sticky;top:0;z-index:2;
+           border-bottom:none}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:var(--surface-2)}
+  tr.lvl0>td{font-weight:600}
+  tr.lvl1>td:first-child{padding-left:1.5rem}
+  tr.lvl2>td:first-child{padding-left:3rem;color:var(--ink-2)}
+  tr.tot>td{border-top:2px solid var(--rule-strong);font-weight:600;background:var(--surface-2)}
+  .tw{max-height:460px;overflow:auto;border:1px solid var(--rule);border-radius:4px}
+  .exp{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;
+       border:1px solid var(--rule-strong);border-radius:2px;font-family:var(--mono);
+       font-size:.7rem;line-height:1;margin-right:.4rem;cursor:pointer;color:var(--muted);
+       background:var(--surface);user-select:none;vertical-align:-1px}
+  .exp:hover{border-color:var(--moss);color:var(--moss)}
+  .leaf{display:inline-block;width:14px;margin-right:.4rem}
+  .neg{color:var(--critical)}
+  .pill{display:inline-flex;align-items:center;gap:.26rem;font-size:.68rem;padding:.04rem .38rem;
+        border-radius:999px;background:var(--surface-2);border:1px solid var(--rule)}
+
+  .tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
+       color:var(--ground);font-family:var(--mono);font-size:.7rem;padding:.4rem .58rem;
+       border-radius:3px;z-index:60;max-width:250px;line-height:1.45}
+  .tip.on{opacity:1}
+  footer{margin-top:1rem;font-size:.74rem;color:var(--muted);max-width:88ch}
+  code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);
+       border:1px solid var(--rule);padding:.04em .28em;border-radius:2px}
+  .empty{padding:1.6rem;text-align:center;color:var(--muted);font-size:.82rem}
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Replenishment Control Tower
+      <small>Direct sales &middot; simulated catalogue</small></div>
+    <div class="f"><label for="fDiv">Division</label><select id="fDiv"></select></div>
+    <div class="f"><label for="fCat">Category</label><select id="fCat"></select></div>
+    <div class="f"><label for="fSrc">Sourcing</label><select id="fSrc"></select></div>
+    <div class="f"><label for="fMon">Month</label><select id="fMon"></select></div>
+    <button class="resetb" id="reset">Reset</button>
+    <div class="spacer" id="stamp"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="row r2">
+    <div class="card">
+      <h2>Composition of what is available</h2>
+      <p class="cap">Of the SKU-months at or above the minimum, how much is sitting
+        above the maximum.</p>
+      <div class="row r2" style="gap:.6rem;margin:0">
+        <div><div id="donutAvail"></div><div class="legend" id="legAvail"></div></div>
+        <div><div id="donutShort"></div><div class="legend" id="legShort"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Priority of the shortfall</h2>
+      <p class="cap">Below the minimum is not one situation. Each row belongs to a
+        different person, and only one of them is a purchase.</p>
+      <div class="prio" id="prio"></div>
+    </div>
+  </div>
+
+  <div class="row r-main">
+    <div class="card">
+      <h2>Coverage matrix</h2>
+      <p class="cap">Click <span class="exp">+</span> to open a division into its
+        categories, and a category into its individual SKUs.</p>
+      <div class="tw"><table id="matrix"></table></div>
+    </div>
+    <div class="card">
+      <h2>Where the exposure sits</h2>
+      <p class="cap">Dollar gap below the minimum by bucket. Every bar is labelled,
+        so colour never carries the meaning alone.</p>
+      <div id="chartAction"></div>
+      <div class="legend" id="legendAction"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>What actually needs a purchase order</h2>
+    <p class="cap">Only rows classified <strong>Buy</strong> &mdash; below the minimum
+      with nothing inbound to cover them. Sorted by exposure.</p>
+    <div class="tw"><table id="buyTable"></table></div>
+  </div>
+
+  <footer>
+    Simulated from a fixed seed; no data from any employer appears here. The same
+    classification runs in a production Power BI report against a SQL Server warehouse
+    and two dataflows &mdash; that model is documented separately. Source data:
+    <code>powerbi/dataset/report_flat.csv</code>.
+  </footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+(function(){
+  "use strict";
+  const raw=JSON.parse(document.getElementById('payload').textContent);
+  const C=raw.cols;
+  const ROWS=raw.rows.map(r=>{const o={};C.forEach((c,i)=>o[c]=r[i]);return o;});
+
+  const ORDER=["Stockout","Buy","In transit","In range","Excess"];
+  const CVAR={"Stockout":"--critical","Buy":"--serious","In transit":"--warning",
+              "In range":"--good","Excess":"--neutral"};
+  const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const col=a=>cssv(CVAR[a]);
+  const SHORT=["Stockout","Buy","In transit"];
+
+  const usd=v=>(v<0?"-":"")+"$"+Math.abs(Math.round(v)).toLocaleString("en-US");
+  const usdK=v=>Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":Math.abs(v)>=1e3?"$"+Math.round(v/1e3)+"K":usd(v);
+  const num=v=>Math.round(v).toLocaleString("en-US");
+  const sum=(rs,k)=>rs.reduce((a,r)=>a+r[k],0);
+
+  const tip=document.getElementById('tip');
+  const showTip=(e,h)=>{tip.innerHTML=h;tip.classList.add('on');
+    const p=12;let x=e.clientX+p,y=e.clientY+p;const r=tip.getBoundingClientRect();
+    if(x+r.width>innerWidth-8)x=e.clientX-r.width-p;
+    if(y+r.height>innerHeight-8)y=e.clientY-r.height-p;
+    tip.style.left=x+'px';tip.style.top=y+'px';};
+  const hideTip=()=>tip.classList.remove('on');
+
+  // ---- filters ------------------------------------------------------------
+  const F={division:'',category:'',sourcing:'',month:''};
+  const uniq=k=>[...new Set(ROWS.map(r=>r[k]))].sort();
+  function fill(id,key,label){
+    const el=document.getElementById(id);
+    el.innerHTML=`<option value="">All ${label}</option>`+uniq(key).map(v=>`<option>${v}</option>`).join('');
+    el.addEventListener('change',()=>{F[key]=el.value;render();});
+  }
+  fill('fDiv','division','divisions');fill('fCat','category','categories');
+  fill('fSrc','sourcing','sourcing');fill('fMon','month','months');
+  document.getElementById('reset').addEventListener('click',()=>{
+    Object.keys(F).forEach(k=>F[k]='');
+    ['fDiv','fCat','fSrc','fMon'].forEach(i=>document.getElementById(i).value='');
+    render();});
+  const apply=()=>ROWS.filter(r=>(!F.division||r.division===F.division)&&
+    (!F.category||r.category===F.category)&&(!F.sourcing||r.sourcing===F.sourcing)&&
+    (!F.month||r.month===F.month));
+
+  document.getElementById('stamp').innerHTML =
+    `${[...new Set(ROWS.map(r=>r.month))].length} months planned<br>${new Set(ROWS.map(r=>r.sku)).size} SKUs`;
+
+  // ---- KPIs ---------------------------------------------------------------
+  function kpis(d){
+    const below=d.filter(r=>SHORT.includes(r.action));
+    const items=[
+      {lab:"SKUs below minimum",val:num(new Set(below.map(r=>r.sku)).size),note:below.length+" SKU-months"},
+      {lab:"To buy",val:usdK(sum(d.filter(r=>r.action==="Buy"),"gapUsd")),note:"no inbound cover",dot:"Buy"},
+      {lab:"Already in transit",val:usdK(sum(d.filter(r=>r.action==="In transit"),"gapUsd")),note:"needs no action",dot:"In transit"},
+      {lab:"Excess above max",val:usdK(sum(d,"excessUsd")),note:"trapped capital",dot:"Excess"},
+      {lab:"On hand",val:usdK(sum(d,"onHandUsd")),note:"at landed cost"},
+      {lab:"Coverage",val:(sum(d,"reqUsd")?Math.min(sum(d,"onHandUsd")/sum(d,"reqUsd"),9.99):0).toLocaleString("en-US",{style:"percent",maximumFractionDigits:1}),note:"on hand vs required at min"},
+    ];
+    document.getElementById('kpis').innerHTML=items.map(i=>`<div class="kpi">
+      <div class="lab">${i.dot?`<span class="dot" style="background:${col(i.dot)}"></span>`:''}${i.lab}</div>
+      <span class="val">${i.val}</span><div class="note">${i.note}</div></div>`).join('');
+  }
+
+  // ---- donuts -------------------------------------------------------------
+  function donut(hostId,legId,parts,total,centre){
+    const host=document.getElementById(hostId);
+    if(!total){host.innerHTML='<div class="empty">No rows.</div>';
+      document.getElementById(legId).innerHTML='';return;}
+    const S=178,cx=S/2,cy=S/2,R=64,r=40;let a0=-Math.PI/2;
+    let s=`<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="${centre.label}">`;
+    parts.forEach(p=>{
+      if(!p.v)return;
+      const frac=p.v/total, a1=a0+frac*Math.PI*2, big=frac>.5?1:0;
+      const P=(rad,ang)=>[cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)];
+      const[x1,y1]=P(R,a0),[x2,y2]=P(R,a1),[x3,y3]=P(r,a1),[x4,y4]=P(r,a0);
+      s+=`<path d="M${x1},${y1} A${R},${R} 0 ${big},1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${big},0 ${x4},${y4} Z"
+            fill="${p.c}" stroke="var(--surface)" stroke-width="2" class="seg"
+            data-l="${p.l}" data-v="${p.v}" data-p="${(frac*100).toFixed(1)}" style="cursor:default"/>`;
+      a0=a1;
+    });
+    s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-family="var(--mono)" font-size="15"
+          font-weight="600" fill="var(--ink)">${centre.v}</text>`;
+    s+=`<text x="${cx}" y="${cy+13}" text-anchor="middle" font-family="var(--body)" font-size="9"
+          fill="var(--muted)">${centre.label}</text></svg>`;
+    host.innerHTML=s;
+    host.querySelectorAll('.seg').forEach(el=>{
+      el.addEventListener('mousemove',e=>showTip(e,`<b>${el.dataset.l}</b><br>${num(+el.dataset.v)} SKU-months<br>${el.dataset.p}%`));
+      el.addEventListener('mouseleave',hideTip);});
+    document.getElementById(legId).innerHTML=parts.filter(p=>p.v)
+      .map(p=>`<span><span class="dot" style="background:${p.c}"></span>${p.l} ${num(p.v)}</span>`).join('');
+  }
+
+  // ---- priority -----------------------------------------------------------
+  function prio(d){
+    const rows=[
+      {a:"Buy",t1:"Buy",t2:"No cover anywhere",k:"gapUsd"},
+      {a:"In transit",t1:"In transit",t2:"Inbound already covers it",k:"gapUsd"},
+      {a:"Stockout",t1:"Stockout",t2:"Zero on hand against demand",k:"gapUsd"},
+    ];
+    document.getElementById('prio').innerHTML=rows.map(r=>{
+      const rs=d.filter(x=>x.action===r.a);
+      return `<div class="it"><span class="dot" style="background:${col(r.a)}"></span>
+        <span class="txt"><span class="t1">${r.t1}</span>
+        <span class="t2">${r.t2} &middot; ${new Set(rs.map(x=>x.sku)).size} SKUs</span></span>
+        <span class="v" style="color:${col(r.a)}">${usdK(sum(rs,r.k))}</span></div>`;}).join('');
+  }
+
+  // ---- exposure bars ------------------------------------------------------
+  function chartAction(d){
+    const agg=ORDER.map(a=>{const rs=d.filter(r=>r.action===a);
+      return{action:a,value:a==="Excess"?sum(rs,"excessUsd"):sum(rs,"gapUsd"),
+             n:rs.length,skus:new Set(rs.map(r=>r.sku)).size};}).filter(x=>x.n>0);
+    const host=document.getElementById('chartAction');
+    if(!agg.length){host.innerHTML='<div class="empty">Nothing matches these filters.</div>';
+      document.getElementById('legendAction').innerHTML='';return;}
+    const W=430,rowH=44,padL=92,padR=68,H=agg.length*rowH+10;
+    const max=Math.max(...agg.map(a=>a.value),1),X=v=>padL+(v/max)*(W-padL-padR);
+    let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Dollar gap below minimum by bucket">`;
+    agg.forEach((a,i)=>{const y=i*rowH+6,bh=21,w=Math.max(X(a.value)-padL,2);
+      s+=`<text x="${padL-9}" y="${y+bh/2+4}" text-anchor="end" font-size="11.5" fill="var(--ink)" font-family="var(--body)">${a.action}</text>`;
+      s+=`<rect x="${padL}" y="${y}" width="${w}" height="${bh}" rx="4" fill="${col(a.action)}"
+            class="barA" data-a="${a.action}" data-v="${a.value}" data-n="${a.n}" data-s="${a.skus}" style="cursor:default"/>`;
+      s+=`<text x="${padL+w+7}" y="${y+bh/2+4}" font-family="var(--mono)" font-size="11" fill="var(--ink-2)">${usdK(a.value)}</text>`;
+      s+=`<text x="${padL}" y="${y+bh+12}" font-size="9.6" fill="var(--muted)" font-family="var(--body)">${a.skus} SKUs &middot; ${a.n} SKU-months</text>`;});
+    s+=`</svg>`;host.innerHTML=s;
+    host.querySelectorAll('.barA').forEach(el=>{
+      el.addEventListener('mousemove',e=>showTip(e,`<b>${el.dataset.a}</b><br>${usd(+el.dataset.v)}<br>${el.dataset.s} SKUs, ${el.dataset.n} SKU-months`));
+      el.addEventListener('mouseleave',hideTip);});
+    document.getElementById('legendAction').innerHTML=agg.map(a=>
+      `<span><span class="dot" style="background:${col(a.action)}"></span>${a.action}</span>`).join('');
+  }
+
+  // ---- coverage matrix, drillable to SKU ----------------------------------
+  const open={};
+  function metrics(rs){
+    const o={skus:new Set(rs.map(r=>r.sku)).size,onHand:sum(rs,"onHandUsd"),
+             req:sum(rs,"reqUsd"),gap:0,exc:sum(rs,"excessUsd")};
+    ORDER.forEach(a=>o[a]=rs.filter(r=>r.action===a).length);
+    o.gap=sum(rs.filter(r=>SHORT.includes(r.action)),"gapUsd");
+    o.varAbs=o.onHand-o.req;
+    o.pct=o.req?o.onHand/o.req:null;
+    return o;
+  }
+  function matrixRow(label,lvl,m,key,hasKids){
+    const toggle=hasKids
+      ? `<span class="exp" data-k="${key}">${open[key]?'&minus;':'+'}</span>`
+      : `<span class="leaf"></span>`;
+    const cell=a=>m[a]?`<span class="pill"><span class="dot" style="background:${col(a)}"></span>${m[a]}</span>`:'<span style="color:var(--muted)">&mdash;</span>';
+    return `<tr class="lvl${lvl}"><td>${toggle}${label}</td>
+      <td class="n">${num(m.skus)}</td>
+      <td class="n">${usdK(m.onHand)}</td>
+      <td class="n">${usdK(m.req)}</td>
+      <td class="n ${m.varAbs<0?'neg':''}">${usdK(m.varAbs)}</td>
+      <td class="n ${m.gap?'neg':''}">${m.gap?usdK(m.gap):'&mdash;'}</td>
+      <td class="n">${m.exc?usdK(m.exc):'&mdash;'}</td>
+      ${ORDER.map(a=>`<td>${cell(a)}</td>`).join('')}
+      <td class="n">${m.pct===null?'&mdash;':(m.pct*100).toFixed(1)+'%'}</td></tr>`;
+  }
+  function matrix(d){
+    const el=document.getElementById('matrix');
+    if(!d.length){el.innerHTML=`<tbody><tr><td class="empty">Nothing matches these filters.</td></tr></tbody>`;return;}
+    let body='';
+    [...new Set(d.map(r=>r.division))].sort().forEach(dv=>{
+      const dr=d.filter(r=>r.division===dv), kd='d|'+dv;
+      body+=matrixRow(dv,0,metrics(dr),kd,true);
+      if(open[kd]){
+        [...new Set(dr.map(r=>r.category))].sort().forEach(ct=>{
+          const cr=dr.filter(r=>r.category===ct), kc='c|'+dv+'|'+ct;
+          body+=matrixRow(ct,1,metrics(cr),kc,true);
+          if(open[kc]){
+            const skus=[...new Set(cr.map(r=>r.sku))].sort();
+            skus.map(sk=>{const sr=cr.filter(r=>r.sku===sk);
+              return{lbl:sr[0].product,m:metrics(sr)};})
+              .sort((a,b)=>b.m.gap-a.m.gap)
+              .forEach(x=>{body+=matrixRow(x.lbl,2,x.m,'',false);});
+          }
+        });
+      }
+    });
+    body+=matrixRow('<strong>Total</strong>',0,metrics(d),'',false).replace('<tr class="lvl0"','<tr class="lvl0 tot"');
+    el.innerHTML=`<thead><tr><th>Division / Category / SKU</th><th class="n">SKUs</th>
+      <th class="n">On hand $</th><th class="n">Required $</th><th class="n">Variance</th>
+      <th class="n">Shortfall $</th><th class="n">Excess $</th>
+      ${ORDER.map(a=>`<th>${a}</th>`).join('')}<th class="n">% cover</th></tr></thead>
+      <tbody>${body}</tbody>`;
+    el.querySelectorAll('.exp').forEach(b=>b.addEventListener('click',()=>{
+      const k=b.dataset.k;open[k]=!open[k];matrix(apply());}));
+  }
+
+  // ---- buy list -----------------------------------------------------------
+  function buyTable(d){
+    const rs=d.filter(r=>r.action==="Buy").sort((a,b)=>b.gapUsd-a.gapUsd);
+    const el=document.getElementById('buyTable');
+    if(!rs.length){el.innerHTML=`<tbody><tr><td class="empty">No purchase orders needed under these filters.</td></tr></tbody>`;return;}
+    el.innerHTML=`<thead><tr><th>Product</th><th>Category</th><th>Month</th><th>Origin</th>
+      <th class="n">On hand</th><th class="n">Min</th><th class="n">In transit</th>
+      <th class="n">Gap to min</th></tr></thead><tbody>`+
+      rs.map(r=>`<tr><td>${r.product}</td><td>${r.category}</td>
+        <td style="font-family:var(--mono)">${r.month}</td><td>${r.origin}</td>
+        <td class="n">${num(r.onHand)}</td><td class="n">${num(r.min)}</td>
+        <td class="n">${num(r.inTransit)}</td>
+        <td class="n" style="font-weight:600">${usd(r.gapUsd)}</td></tr>`).join('')+`</tbody>`;
+  }
+
+  function render(){
+    const d=apply();
+    kpis(d);prio(d);chartAction(d);matrix(d);buyTable(d);
+    const avail=d.filter(r=>!SHORT.includes(r.action));
+    donut('donutAvail','legAvail',
+      [{l:"In range",v:avail.filter(r=>r.action==="In range").length,c:col("In range")},
+       {l:"Excess",v:avail.filter(r=>r.action==="Excess").length,c:col("Excess")}],
+      avail.length,{v:num(avail.length),label:"available"});
+    const shortR=d.filter(r=>SHORT.includes(r.action));
+    donut('donutShort','legShort',
+      SHORT.map(a=>({l:a,v:shortR.filter(r=>r.action===a).length,c:col(a)})),
+      shortR.length,{v:num(shortR.length),label:"below min"});
+  }
+  render();
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',render);
+})();
+</script>

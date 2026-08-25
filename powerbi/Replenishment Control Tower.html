@@ -1,0 +1,414 @@
+<title>Replenishment Control Tower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#F4F6F4; --surface:#FFFFFF; --surface-2:#F2F1EB; --rule:#E2E4E0;
+    --rule-strong:#C6CAC5; --ink:#17211C; --ink-2:#3D4842; --muted:#6E7671;
+    --moss:#2F7D4F; --moss-deep:#1F5F3A; --band:#E8F0EA;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+    --neutral:#7C8894; --grid:#EAECE8;
+    --display:"Newsreader",Georgia,serif;
+    --body:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#11150F; --surface:#191E17; --surface-2:#212720; --rule:#2C332A;
+    --rule-strong:#48513f; --ink:#EBEDE6; --ink-2:#C3C8BE; --muted:#8B948A;
+    --moss:#8FBF9F; --moss-deep:#A9D2B6; --band:#1E2A21;
+    --good:#3fc23f; --warning:#fab219; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --grid:#252C24;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#11150F; --surface:#191E17; --surface-2:#212720; --rule:#2C332A;
+    --rule-strong:#48513f; --ink:#EBEDE6; --ink-2:#C3C8BE; --muted:#8B948A;
+    --moss:#8FBF9F; --moss-deep:#A9D2B6; --band:#1E2A21;
+    --good:#3fc23f; --warning:#fab219; --serious:#ef9a78; --critical:#e05f5f;
+    --neutral:#93a0ad; --grid:#252C24;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+       font-size:14.5px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1460px;margin:0 auto;padding:0 1rem 3rem}
+
+  /* header bar, in the spirit of the production report */
+  .topbar{background:var(--moss);color:#fff;padding:.85rem 1.15rem;display:flex;
+          flex-wrap:wrap;gap:.9rem 1.4rem;align-items:center;margin:0 -1rem 1.1rem}
+  .brand{font-family:var(--display);font-size:1.32rem;font-weight:500;letter-spacing:-.01em}
+  .brand small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;
+               text-transform:uppercase;opacity:.82;font-weight:400;margin-top:.1rem}
+  .topbar .f{display:flex;flex-direction:column;gap:.18rem}
+  .topbar .f label{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;
+                   text-transform:uppercase;opacity:.85}
+  .topbar select{font-family:var(--body);font-size:.8rem;padding:.28rem .45rem;
+                 background:#fff;color:#17211C;border:0;border-radius:3px;min-width:126px}
+  .topbar select:focus-visible{outline:2px solid #fff;outline-offset:1px}
+  .spacer{margin-left:auto;text-align:right;font-family:var(--mono);font-size:.66rem;
+          letter-spacing:.05em;opacity:.9;line-height:1.5}
+  .resetb{font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;
+          background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:#fff;
+          padding:.34rem .6rem;border-radius:3px;cursor:pointer}
+  .resetb:hover{background:rgba(255,255,255,.28)}
+
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;
+        padding:.85rem 1rem;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .card h2{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 .1rem;
+           letter-spacing:-.01em;border-left:3px solid var(--moss);padding-left:.5rem}
+  .card p.cap{font-size:.75rem;color:var(--muted);margin:.3rem 0 .7rem;max-width:62ch}
+
+  .row{display:grid;gap:.9rem;margin-bottom:.9rem}
+  .r2{grid-template-columns:1fr 1fr}
+  .r-main{grid-template-columns:2.1fr 1fr}
+  @media(max-width:1080px){.r2,.r-main{grid-template-columns:1fr}}
+
+  /* priority panel */
+  .prio{display:flex;flex-direction:column;gap:.1rem}
+  .prio .it{display:flex;align-items:center;gap:.6rem;padding:.62rem .2rem;
+            border-bottom:1px solid var(--rule)}
+  .prio .it:last-child{border-bottom:none}
+  .prio .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto}
+  .prio .txt{flex:1;min-width:0}
+  .prio .t1{font-weight:600;font-size:.95rem;line-height:1.2}
+  .prio .t2{font-size:.72rem;color:var(--muted)}
+  .prio .v{font-family:var(--mono);font-size:1.2rem;font-weight:600;
+           font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem;
+        margin-bottom:.9rem}
+  .kpi{background:var(--surface);border:1px solid var(--rule);border-radius:6px;
+       padding:.7rem .85rem}
+  .kpi .lab{font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:.32rem}
+  .kpi .val{font-family:var(--mono);font-size:1.42rem;font-weight:600;letter-spacing:-.02em;
+            font-variant-numeric:tabular-nums;margin-top:.18rem;display:block}
+  .kpi .note{font-size:.68rem;color:var(--muted)}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;display:inline-block}
+
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .legend{display:flex;flex-wrap:wrap;gap:.35rem .9rem;margin-top:.5rem;
+          font-size:.74rem;color:var(--ink-2)}
+  .legend span{display:flex;align-items:center;gap:.32rem}
+
+  table{border-collapse:collapse;width:100%;font-size:.78rem}
+  th,td{padding:.34rem .5rem;border-bottom:1px solid var(--rule);text-align:left;
+        white-space:nowrap}
+  thead th{background:var(--moss);color:#fff;font-size:.65rem;letter-spacing:.05em;
+           text-transform:uppercase;font-weight:600;position:sticky;top:0;z-index:2;
+           border-bottom:none}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:var(--surface-2)}
+  tr.lvl0>td{font-weight:600}
+  tr.lvl1>td:first-child{padding-left:1.5rem}
+  tr.lvl2>td:first-child{padding-left:3rem;color:var(--ink-2)}
+  tr.tot>td{border-top:2px solid var(--rule-strong);font-weight:600;background:var(--surface-2)}
+  .tw{max-height:460px;overflow:auto;border:1px solid var(--rule);border-radius:4px}
+  .exp{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;
+       border:1px solid var(--rule-strong);border-radius:2px;font-family:var(--mono);
+       font-size:.7rem;line-height:1;margin-right:.4rem;cursor:pointer;color:var(--muted);
+       background:var(--surface);user-select:none;vertical-align:-1px}
+  .exp:hover{border-color:var(--moss);color:var(--moss)}
+  .leaf{display:inline-block;width:14px;margin-right:.4rem}
+  .neg{color:var(--critical)}
+  .pill{display:inline-flex;align-items:center;gap:.26rem;font-size:.68rem;padding:.04rem .38rem;
+        border-radius:999px;background:var(--surface-2);border:1px solid var(--rule)}
+
+  .tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
+       color:var(--ground);font-family:var(--mono);font-size:.7rem;padding:.4rem .58rem;
+       border-radius:3px;z-index:60;max-width:250px;line-height:1.45}
+  .tip.on{opacity:1}
+  footer{margin-top:1rem;font-size:.74rem;color:var(--muted);max-width:88ch}
+  code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);
+       border:1px solid var(--rule);padding:.04em .28em;border-radius:2px}
+  .empty{padding:1.6rem;text-align:center;color:var(--muted);font-size:.82rem}
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Replenishment Control Tower
+      <small>Direct sales &middot; simulated catalogue</small></div>
+    <div class="f"><label for="fDiv">Division</label><select id="fDiv"></select></div>
+    <div class="f"><label for="fCat">Category</label><select id="fCat"></select></div>
+    <div class="f"><label for="fSrc">Sourcing</label><select id="fSrc"></select></div>
+    <div class="f"><label for="fMon">Month</label><select id="fMon"></select></div>
+    <button class="resetb" id="reset">Reset</button>
+    <div class="spacer" id="stamp"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="row r2">
+    <div class="card">
+      <h2>Composition of what is available</h2>
+      <p class="cap">Of the SKU-months at or above the minimum, how much is sitting
+        above the maximum.</p>
+      <div class="row r2" style="gap:.6rem;margin:0">
+        <div><div id="donutAvail"></div><div class="legend" id="legAvail"></div></div>
+        <div><div id="donutShort"></div><div class="legend" id="legShort"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Priority of the shortfall</h2>
+      <p class="cap">Below the minimum is not one situation. Each row belongs to a
+        different person, and only one of them is a purchase.</p>
+      <div class="prio" id="prio"></div>
+    </div>
+  </div>
+
+  <div class="row r-main">
+    <div class="card">
+      <h2>Coverage matrix</h2>
+      <p class="cap">Click <span class="exp">+</span> to open a division into its
+        categories, and a category into its individual SKUs.</p>
+      <div class="tw"><table id="matrix"></table></div>
+    </div>
+    <div class="card">
+      <h2>Where the exposure sits</h2>
+      <p class="cap">Dollar gap below the minimum by bucket. Every bar is labelled,
+        so colour never carries the meaning alone.</p>
+      <div id="chartAction"></div>
+      <div class="legend" id="legendAction"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>What actually needs a purchase order</h2>
+    <p class="cap">Only rows classified <strong>Buy</strong> &mdash; below the minimum
+      with nothing inbound to cover them. Sorted by exposure.</p>
+    <div class="tw"><table id="buyTable"></table></div>
+  </div>
+
+  <footer>
+    Simulated from a fixed seed; no data from any employer appears here. The same
+    classification runs in a production Power BI report against a SQL Server warehouse
+    and two dataflows &mdash; that model is documented separately. Source data:
+    <code>powerbi/dataset/report_flat.csv</code>.
+  </footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script id="payload" type="application/json">{"cols":["sku","product","division","category","sourcing","origin","month","action","onHand","min","max","inTransit","gapUsd","excessUsd","reqUsd","onHandUsd","demand","orderUsd"],"rows":[["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2026-09","Buy",10842,89037,108118,0,529474,0,602887,73413,17206,880188],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2026-10","Buy",15613,89037,108118,28870,497169,0,602887,105719,24099,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2026-11","Stockout",0,89037,108118,14628,602887,0,602887,0,31610,221012],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2026-12","Stockout",0,89037,108118,32047,602887,0,602887,0,35942,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-01","Excess",113387,89037,108118,0,0,35677,602887,767766,16603,213780],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-02","In range",97099,89037,108118,0,0,0,602887,657477,16288,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-03","Excess",112018,89037,108118,0,0,26408,602887,758496,17721,227106],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-04","In range",93927,89037,108118,0,0,0,602887,635998,18091,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-05","Excess",108123,89037,108118,0,0,34,602887,732122,17376,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-06","In range",91476,89037,108118,0,0,0,602887,619402,16647,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-07","In range",108118,89037,108118,0,0,0,602887,732089,16898,0],["BTR-1001","Organic Mushroom Grow Kit - Oyster","Indoor Growing","Mushroom Kits","Import","China","2027-08","In range",89884,89037,108118,0,0,0,602887,608623,18234,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-09","Buy",12479,22771,27648,0,74589,0,165028,90439,4328,187763],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-10","Buy",11523,22771,27648,5025,81518,0,165028,83511,5981,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-11","Buy",8091,22771,27648,4310,106390,0,165028,58638,7742,57616],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-12","Buy",5701,22771,27648,6296,123711,0,165028,41317,8686,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-01","Excess",27650,22771,27648,0,0,14,165028,200388,3959,58486],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-02","In range",23817,22771,27648,0,0,0,165028,172609,3833,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-03","Excess",27653,22771,27648,0,0,36,165028,200410,4114,53876],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-04","In range",23509,22771,27648,0,0,0,165028,170377,4144,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-05","Excess",27651,22771,27648,0,0,22,165028,200395,3928,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-06","In range",23938,22771,27648,0,0,0,165028,173486,3713,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-07","Excess",27653,22771,27648,0,0,36,165028,200410,3719,0],["BTR-1002","Pink Oyster Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-08","In range",23693,22771,27648,0,0,0,165028,171710,3960,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-09","Buy",5378,15213,18379,0,79306,0,122672,43366,2697,173013],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-10","Buy",5556,15213,18379,3894,77870,0,122672,44801,3716,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-11","Buy",2535,15213,18379,1775,102230,0,122672,20441,4796,39286],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2026-12","Stockout",0,15213,18379,2194,122672,0,122672,0,5364,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-01","Excess",19018,15213,18379,0,0,5153,122672,153354,2438,34544],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-02","In range",16665,15213,18379,0,0,0,122672,134380,2353,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-03","Excess",19019,15213,18379,0,0,5161,122672,153362,2518,36286],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-04","In range",16490,15213,18379,0,0,0,122672,132969,2529,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-05","Excess",18384,15213,18379,0,0,40,122672,148241,2390,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-06","In range",16132,15213,18379,0,0,0,122672,130082,2252,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-07","Excess",18383,15213,18379,0,0,32,122672,148233,2249,0],["BTR-1003","Lion's Mane Mushroom Grow Kit","Indoor Growing","Mushroom Kits","Import","China","2027-08","In range",15995,15213,18379,0,0,0,122672,128977,2388,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2026-09","Buy",6407,12071,14691,0,72509,0,154531,82021,2166,168574],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2026-10","Buy",5562,12071,14691,2131,83327,0,154531,71204,2976,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2026-11","Buy",4150,12071,14691,2417,101403,0,154531,53127,3829,49313],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2026-12","Buy",3459,12071,14691,3581,110249,0,154531,44281,4272,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-01","In range",14691,12071,14691,0,0,0,154531,188071,1936,49517],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-02","In range",12828,12071,14691,0,0,0,154531,164221,1863,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-03","Excess",14692,12071,14691,0,0,13,154531,188084,1988,45062],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-04","In range",12701,12071,14691,0,0,0,154531,162596,1991,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-05","Excess",14693,12071,14691,0,0,26,154531,188097,1876,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-06","In range",12930,12071,14691,0,0,0,154531,165527,1763,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-07","Excess",14694,12071,14691,0,0,38,154531,188110,1756,0],["BTR-1004","Mushroom Grow Kit 2-Pack","Indoor Growing","Mushroom Kits","Import","China","2027-08","In range",12835,12071,14691,0,0,0,154531,164311,1859,0],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2026-09","Buy",4499,10935,13148,0,93894,0,159529,65635,2355,231437],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2026-10","Buy",4123,10935,13148,2963,99379,0,159529,60150,3339,34605],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2026-11","Buy",1739,10935,13148,2050,134159,0,159529,25370,4434,38106],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2026-12","Stockout",0,10935,13148,3039,159529,0,159529,0,5105,34605],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-01","Excess",13477,10935,13148,0,0,4800,159529,196613,2387,38281],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-02","Excess",13478,10935,13148,0,0,4814,159529,196628,2371,37114],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-03","Excess",13478,10935,13148,0,0,4814,159529,196628,2612,38223],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-04","Excess",13151,10935,13148,0,0,44,159529,191857,2699,41666],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-05","Excess",13150,10935,13148,0,0,29,159529,191843,2625,0],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-06","In range",13148,10935,13148,0,0,0,159529,191814,2546,0],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-07","Excess",13151,10935,13148,0,0,44,159529,191857,2617,0],["BTR-1005","Mushroom Kit Holiday Gift Box","Indoor Growing","Mushroom Kits","Import","China","2027-08","In range",13148,10935,13148,0,0,0,159529,191814,2859,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2026-09","In range",12427,10607,13416,4774,0,0,316000,370220,2256,84251],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2026-10","In range",13183,10607,13416,3636,0,0,316000,392743,2880,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2026-11","Excess",13663,10607,13416,3609,0,7359,316000,407043,3129,117617],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2026-12","In range",13416,10607,13416,0,0,0,316000,399684,3075,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-01","In range",11403,10607,13416,0,0,0,316000,339714,2013,154916],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-02","In range",13416,10607,13416,0,0,0,316000,399684,1935,90388],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-03","In range",10842,10607,13416,0,0,0,316000,323001,2574,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-04","In range",13416,10607,13416,0,0,0,316000,399684,2626,145979],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-05","In range",13416,10607,13416,0,0,0,316000,399684,3034,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-06","In range",10813,10607,13416,0,0,0,316000,322137,2603,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-07","Excess",13417,10607,13416,0,0,30,316000,399714,2296,0],["BTR-1101","Water Garden 3-Gallon Aquaponics","Indoor Growing","Water Garden","Import","Vietnam","2027-08","In range",11014,10607,13416,0,0,0,316000,328125,2403,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2026-09","In transit",14566,16234,20248,3555,7349,0,71524,64175,3140,43512],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2026-10","In transit",13884,16234,20248,3389,10354,0,71524,61170,4071,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2026-11","In transit",14860,16234,20248,5467,6054,0,71524,65470,4491,25959],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2026-12","Excess",20254,16234,20248,0,0,26,71524,89235,4482,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-01","In range",17275,16234,20248,0,0,0,71524,76110,2979,35211],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-02","Excess",20259,16234,20248,0,0,48,71524,89257,2908,21042],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-03","In range",16332,16234,20248,0,0,0,71524,71956,3927,18293],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-04","Excess",20255,16234,20248,0,0,31,71524,89239,4069,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-05","Excess",20258,16234,20248,0,0,44,71524,89253,4773,33837],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-06","Excess",20252,16234,20248,0,0,18,71524,89226,4158,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-07","In range",16528,16234,20248,0,0,0,71524,72819,3724,0],["BTR-1102","Water Garden Refill & Seed Kit","Indoor Growing","Water Garden","Import","Vietnam","2027-08","Excess",20250,16234,20248,0,0,9,71524,89217,3958,0],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2026-09","Stockout",0,8908,10695,0,179641,0,179641,0,1710,221991],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2026-10","Stockout",0,8908,10695,1733,179641,0,179641,0,2240,0],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2026-11","Buy",614,8908,10695,3110,167259,0,179641,12382,2496,69291],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2026-12","Buy",1884,8908,10695,3787,141648,0,179641,37993,2517,47915],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-01","Excess",11202,8908,10695,0,0,10224,179641,225903,1690,56869],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-02","In range",9535,8908,10695,0,0,0,179641,192286,1667,50093],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-03","Excess",10698,8908,10695,0,0,60,179641,215739,2273,45253],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-04","In range",10695,8908,10695,0,0,0,179641,215679,2379,48641],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-05","In range",10695,8908,10695,0,0,0,179641,215679,2820,0],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-06","Excess",10697,8908,10695,0,0,40,179641,215719,2482,0],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-07","Excess",10696,8908,10695,0,0,20,179641,215699,2245,0],["BTR-1103","Self-Watering Countertop Grow Kit","Indoor Growing","Water Garden","Import","India","2027-08","Excess",10697,8908,10695,0,0,40,179641,215719,2411,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2026-09","Buy",14340,30694,37102,0,86375,0,162113,75738,5696,142413],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2026-10","Buy",13287,30694,37102,5079,91937,0,162113,70177,6132,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2026-11","Buy",13627,30694,37102,9134,90141,0,162113,71972,8794,75485],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2026-12","Buy",15888,30694,37102,8817,78199,0,162113,83914,6556,48105],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-01","Excess",37112,30694,37102,0,0,53,162113,196011,5740,43225],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-02","In range",30741,30694,37102,0,0,0,162113,162362,6371,34352],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-03","Excess",37104,30694,37102,0,0,11,162113,195968,7929,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-04","Excess",37107,30694,37102,0,0,26,162113,195984,9105,63062],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-05","Excess",37107,30694,37102,0,0,26,162113,195984,8184,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-06","Excess",37110,30694,37102,0,0,42,162113,196000,6501,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-07","In range",31285,30694,37102,0,0,0,162113,165235,5825,0],["BTR-1201","Windowsill Herb Kit - Basil","Indoor Growing","Herb Kits","Import","India","2027-08","Excess",37108,30694,37102,0,0,32,162113,195990,6117,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2026-09","Buy",11930,21165,25530,0,48776,0,111785,63009,3584,49626],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2026-10","Buy",13602,21165,25530,5478,39945,0,111785,71840,3806,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2026-11","In transit",16468,21165,25530,8250,24808,0,111785,86977,5384,44049],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2026-12","In transit",19564,21165,25530,7055,8456,0,111785,103329,3959,27443],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-01","Excess",25540,21165,25530,0,0,53,111785,134892,3420,24401],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-02","In range",21796,21165,25530,0,0,0,111785,115118,3744,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-03","Excess",25540,21165,25530,0,0,53,111785,134892,4596,35999],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-04","In range",25530,21165,25530,0,0,0,111785,134839,5206,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-05","Excess",25534,21165,25530,0,0,21,111785,134860,4616,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-06","In range",21917,21165,25530,0,0,0,111785,115757,3617,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-07","Excess",25536,21165,25530,0,0,32,111785,134871,3197,0],["BTR-1202","Windowsill Herb Kit - Cilantro","Indoor Growing","Herb Kits","Import","India","2027-08","In range",22224,21165,25530,0,0,0,111785,117378,3312,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2026-09","Buy",8703,18703,22256,0,52816,0,98782,45966,2822,86576],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2026-10","Buy",9185,18703,22256,3532,50270,0,98782,48512,3050,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2026-11","Buy",7905,18703,22256,3112,57031,0,98782,41751,4392,38281],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2026-12","Buy",8760,18703,22256,4142,52515,0,98782,46267,3287,24464],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-01","Excess",22262,18703,22256,0,0,32,98782,117579,2890,22119],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-02","In range",19042,18703,22256,0,0,0,98782,100572,3220,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-03","Excess",22267,18703,22256,0,0,58,98782,117605,4023,33464],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-04","Excess",22260,18703,22256,0,0,21,98782,117568,4639,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-05","Excess",22262,18703,22256,0,0,32,98782,117579,4186,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-06","In range",18923,18703,22256,0,0,0,98782,99944,3339,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-07","In range",22256,18703,22256,0,0,0,98782,117547,3003,0],["BTR-1203","Windowsill Herb Kit - Mint","Indoor Growing","Herb Kits","Import","India","2027-08","In range",19090,18703,22256,0,0,0,98782,100826,3166,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2026-09","Buy",9439,13711,16776,2767,51983,0,166841,114858,2478,169530],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2026-10","Buy",9525,13711,16776,2754,50937,0,166841,115904,2668,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2026-11","Buy",5699,13711,16776,0,97493,0,166841,69348,3826,64103],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2026-12","Excess",16779,13711,16776,0,0,37,166841,204174,2852,41957],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-01","In range",14282,13711,16776,0,0,0,166841,173789,2497,48138],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-02","Excess",16779,13711,16776,0,0,37,166841,204174,2771,43320],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-03","Excess",16779,13711,16776,0,0,37,166841,204174,3448,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-04","In range",16776,13711,16776,0,0,0,166841,204137,3959,65223],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-05","Excess",16777,13711,16776,0,0,12,166841,204149,3559,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-06","In range",13950,13711,16776,0,0,0,166841,169749,2827,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-07","Excess",16778,13711,16776,0,0,24,166841,204161,2532,0],["BTR-1204","Herb Garden Trio Gift Set","Indoor Growing","Herb Kits","Import","Vietnam","2027-08","In range",14119,13711,16776,0,0,0,166841,171806,2659,0],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2026-09","Buy",3888,8488,10746,1909,27987,0,51643,23655,2086,51107],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2026-10","Buy",4329,8488,10746,2694,25304,0,51643,26338,2253,0],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2026-11","Buy",4775,8488,10746,3689,22591,0,51643,29052,3243,27452],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2026-12","Excess",10749,8488,10746,0,0,18,51643,65399,2426,18034],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-01","In range",8617,8488,10746,0,0,0,51643,52428,2132,20808],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-02","Excess",10755,8488,10746,0,0,55,51643,65436,2374,18691],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-03","Excess",10754,8488,10746,0,0,49,51643,65429,2965,14967],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-04","Excess",10757,8488,10746,0,0,67,51643,65448,3417,0],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-05","Excess",10747,8488,10746,0,0,6,51643,65387,3082,27598],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-06","Excess",10750,8488,10746,0,0,24,51643,65405,2457,0],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-07","In range",8541,8488,10746,0,0,0,51643,51965,2209,0],["BTR-1205","Microgreens Grow Kit","Indoor Growing","Herb Kits","Import","Vietnam","2027-08","Excess",10749,8488,10746,0,0,18,51643,65399,2328,0],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2026-09","Buy",18571,23460,33543,4688,18737,0,89910,71173,6243,90094],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2026-10","Buy",16372,23460,33543,5661,27165,0,89910,62746,7860,0],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2026-11","In range",33543,23460,33543,0,0,0,89910,128554,6337,58453],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2026-12","In range",27997,23460,33543,0,0,0,89910,107298,5546,52061],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-01","Excess",33552,23460,33543,0,0,34,89910,128588,9697,65168],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-02","Excess",33551,23460,33543,0,0,31,89910,128584,13585,63144],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-03","Excess",33548,23460,33543,0,0,19,89910,128573,17007,46174],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-04","Excess",33546,23460,33543,0,0,11,89910,128565,16478,0],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-05","Excess",33546,23460,33543,0,0,11,89910,128565,12048,57120],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-06","In range",25596,23460,33543,0,0,0,89910,98097,7950,0],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-07","Excess",33550,23460,33543,0,0,27,89910,128580,6950,0],["BTR-2001","Organic Seed Variety Pack - 12ct","Outdoor Gardening","Seeds","Import","Mexico","2027-08","In range",27260,23460,33543,0,0,0,89910,104474,6290,0],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2026-09","In range",34295,33151,47902,23698,0,0,32186,33297,10152,36094],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2026-10","Buy",21338,33151,47902,0,11469,0,32186,20717,12957,0],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2026-11","Excess",47924,33151,47902,0,0,21,32186,46529,10590,25282],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2026-12","In range",38529,33151,47902,0,0,0,32186,37408,9395,22952],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-01","Excess",47914,33151,47902,0,0,12,32186,46520,16655,29150],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-02","Excess",47903,33151,47902,0,0,1,32186,46509,23651,28614],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-03","Excess",47911,33151,47902,0,0,9,32186,46517,30016,21228],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-04","In range",47902,33151,47902,0,0,0,32186,46508,29481,0],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-05","Excess",47914,33151,47902,0,0,12,32186,46520,21852,26774],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-06","In range",33297,33151,47902,0,0,0,32186,32328,14617,0],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-07","Excess",47918,33151,47902,0,0,16,32186,46524,12955,0],["BTR-2002","Organic Heirloom Tomato Seeds","Outdoor Gardening","Seeds","Import","Mexico","2027-08","In range",36033,33151,47902,0,0,0,32186,34984,11885,0],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2026-09","In transit",15654,22912,33542,12485,8159,0,25758,17598,6844,25092],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2026-10","In transit",18324,22912,33542,11370,5158,0,25758,20600,8700,0],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2026-11","Excess",33562,22912,33542,0,0,22,25758,37730,7082,19453],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2026-12","In range",27305,22912,33542,0,0,0,25758,30696,6257,17564],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-01","Excess",33562,22912,33542,0,0,22,25758,37730,11047,22178],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-02","Excess",33562,22912,33542,0,0,22,25758,37730,15624,21720],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-03","In range",33542,22912,33542,0,0,0,25758,37708,19748,16054],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-04","Excess",33545,22912,33542,0,0,3,25758,37711,19317,0],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-05","Excess",33565,22912,33542,0,0,26,25758,37734,14260,20101],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-06","In range",24066,22912,33542,0,0,0,25758,27055,9499,0],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-07","Excess",33561,22912,33542,0,0,21,25758,37729,8385,0],["BTR-2003","Organic Culinary Herb Seed Pack","Outdoor Gardening","Seeds","Import","Mexico","2027-08","In range",25900,22912,33542,0,0,0,25758,29117,7661,0],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2026-09","In range",10738,10168,17237,3919,0,0,24598,25977,4423,29379],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2026-10","Excess",17259,10168,17237,0,0,53,24598,41753,5623,0],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2026-11","In range",12681,10168,17237,0,0,0,24598,30678,4578,20844],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2026-12","Excess",17251,10168,17237,0,0,34,24598,41734,4046,17302],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-01","Excess",17259,10168,17237,0,0,53,24598,41753,7144,24444],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-02","Excess",17257,10168,17237,0,0,48,24598,41748,10106,30888],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-03","Excess",17248,10168,17237,0,0,27,24598,41726,12777,30250],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-04","Excess",17252,10168,17237,0,0,36,24598,41736,12500,22295],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-05","Excess",17238,10168,17237,0,0,2,24598,41702,9230,0],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-06","In range",11088,10168,17237,0,0,0,24598,26824,6150,28043],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-07","Excess",17250,10168,17237,0,0,31,24598,41731,5430,0],["BTR-2004","Organic Wildflower Pollinator Mix","Outdoor Gardening","Seeds","Import","Canada","2027-08","In range",12288,10168,17237,0,0,0,24598,29727,4962,0],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2026-09","In range",8816,6472,9268,2555,0,0,41009,55862,1740,0],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2026-10","In range",8827,6472,9268,2229,0,0,41009,55931,2218,24484],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2026-11","In range",7016,6472,9268,0,0,0,41009,44456,1811,17995],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2026-12","Excess",9275,6472,9268,0,0,44,41009,58770,1605,25548],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-01","Excess",9272,6472,9268,0,0,25,41009,58751,2843,32392],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-02","Excess",9271,6472,9268,0,0,19,41009,58745,4033,31834],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-03","Excess",9269,6472,9268,0,0,6,41009,58732,5114,23521],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-04","Excess",9275,6472,9268,0,0,44,41009,58770,5018,0],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-05","Excess",9272,6472,9268,0,0,25,41009,58751,3715,29654],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-06","In range",6789,6472,9268,0,0,0,41009,43018,2483,0],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-07","Excess",9271,6472,9268,0,0,19,41009,58745,2198,0],["BTR-2005","Kids Garden Seed Starter Kit","Outdoor Gardening","Seeds","Import","Mexico","2027-08","In range",7256,6472,9268,0,0,0,41009,45977,2015,0],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-09","In range",40574,36598,68153,0,0,0,157371,174468,21023,233464],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-10","Excess",68154,36598,68153,0,0,4,157371,293062,26714,0],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-11","In range",53066,36598,68153,0,0,0,157371,228184,15088,0],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-12","In range",37568,36598,68153,0,0,0,157371,161542,15498,217107],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-01","Excess",68158,36598,68153,0,0,22,157371,293079,19900,141436],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-02","Excess",68154,36598,68153,0,0,4,157371,293062,32896,222989],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-03","In range",68153,36598,68153,0,0,0,157371,293058,51859,245203],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-04","In range",68153,36598,68153,0,0,0,157371,293058,57024,200285],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-05","Excess",68158,36598,68153,0,0,22,157371,293079,46573,151678],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-06","Excess",68155,36598,68153,0,0,9,157371,293066,35277,0],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-07","In range",40122,36598,68153,0,0,0,157371,172525,28033,220719],["BTR-2101","Organic Potting Mix 12qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-08","Excess",68156,36598,68153,0,0,13,157371,293071,23296,0],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-09","In range",38631,24685,45606,40775,0,0,88866,139072,16129,100159],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-10","Excess",45610,24685,45606,0,0,14,88866,164196,20843,0],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-11","In range",33639,24685,45606,0,0,0,88866,121100,11971,88106],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-12","Excess",45608,24685,45606,0,0,7,88866,164189,12505,0],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-01","In range",29279,24685,45606,0,0,0,88866,105404,16329,157615],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-02","Excess",45610,24685,45606,0,0,14,88866,164196,27451,158436],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-03","Excess",45611,24685,45606,0,0,18,88866,164200,44009,177163],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-04","Excess",45610,24685,45606,0,0,14,88866,164196,49213,147139],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-05","Excess",45607,24685,45606,0,0,4,88866,164185,40875,113357],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-06","Excess",45609,24685,45606,0,0,11,88866,164192,31486,91606],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-07","Excess",45611,24685,45606,0,0,18,88866,164200,25444,77393],["BTR-2102","Organic Seed Starting Mix 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-08","In range",45606,24685,45606,0,0,0,88866,164182,21503,0],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2026-09","Excess",36297,10814,23365,13440,0,115095,96245,323043,9028,0],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2026-10","Excess",24838,10814,23365,0,0,13110,96245,221058,11459,0],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2026-11","In range",18374,10814,23365,0,0,0,96245,163529,6464,0],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2026-12","In range",11742,10814,23365,0,0,0,96245,104504,6632,179175],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-01","Excess",23368,10814,23365,0,0,27,96245,207975,8506,124992],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-02","Excess",23367,10814,23365,0,0,18,96245,207966,14045,196832],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-03","Excess",23368,10814,23365,0,0,27,96245,207975,22115,216163],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-04","Excess",23367,10814,23365,0,0,18,96245,207966,24289,176327],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-05","In range",23365,10814,23365,0,0,0,96245,207948,19814,133429],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-06","Excess",23366,10814,23365,0,0,9,96245,207957,14991,0],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-07","In range",11468,10814,23365,0,0,0,96245,102065,11898,193806],["BTR-2103","Organic Raised Bed Mix 1.5 cu ft","Outdoor Gardening","Soils & Media","Domestic","United States","2027-08","Excess",23368,10814,23365,0,0,27,96245,207975,9876,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-09","Excess",27619,6688,14559,8963,0,40486,20733,85619,5508,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-10","Excess",20637,6688,14559,0,0,18842,20733,63975,6982,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-11","Excess",16704,6688,14559,0,0,6650,20733,51782,3933,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2026-12","In range",12673,6688,14559,0,0,0,20733,39286,4031,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-01","In range",7510,6688,14559,0,0,0,20733,23281,5163,48248],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-02","Excess",14560,6688,14559,0,0,3,20733,45136,8514,41515],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-03","Excess",14563,6688,14559,0,0,12,20733,45145,13389,45514],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-04","In range",14559,6688,14559,0,0,0,20733,45133,14686,37107],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-05","Excess",14564,6688,14559,0,0,16,20733,45148,11965,28012],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-06","In range",14559,6688,14559,0,0,0,20733,45133,9041,0],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-07","In range",7392,6688,14559,0,0,0,20733,22915,7167,40641],["BTR-2104","Organic Compost Blend 8qt","Outdoor Gardening","Soils & Media","Domestic","United States","2027-08","Excess",14561,6688,14559,0,0,6,20733,45139,5941,0],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2026-09","Excess",4074,2206,3926,1338,0,4810,71695,132405,1385,0],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2026-10","In range",2563,2206,3926,0,0,0,71695,83298,1511,104845],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2026-11","In range",3926,2206,3926,0,0,0,71695,127595,1863,0],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2026-12","In range",2390,2206,3926,0,0,0,71695,77675,1536,93860],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-01","In range",3926,2206,3926,0,0,0,71695,127595,1352,63732],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-02","In range",3926,2206,3926,0,0,0,71695,127595,1961,88140],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-03","In range",3926,2206,3926,0,0,0,71695,127595,2712,107120],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-04","In range",3926,2206,3926,0,0,0,71695,127595,3296,97792],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-05","In range",3926,2206,3926,0,0,0,71695,127595,3009,63245],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-06","In range",3926,2206,3926,0,0,0,71695,127595,1946,0],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-07","In range",2450,2206,3926,0,0,0,71695,79625,1476,98442],["BTR-2201","Raised Bed Starter Kit","Outdoor Gardening","Garden Kits","Domestic","United States","2027-08","In range",3926,2206,3926,0,0,0,71695,127595,1553,0],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2026-09","Buy",1295,3767,6409,2036,35102,0,53491,18389,2124,105932],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2026-10","Excess",6412,3767,6409,0,0,43,53491,91050,2343,41464],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2026-11","Excess",6410,3767,6409,0,0,14,53491,91022,2922,0],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2026-12","In range",3974,3767,6409,0,0,0,53491,56431,2436,65377],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-01","Excess",6410,3767,6409,0,0,14,53491,91022,2168,45156],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-02","Excess",6411,3767,6409,0,0,28,53491,91036,3179,63105],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-03","Excess",6410,3767,6409,0,0,14,53491,91022,4445,77589],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-04","Excess",6412,3767,6409,0,0,43,53491,91050,5462,71568],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-05","In range",6409,3767,6409,0,0,0,53491,91008,5043,46860],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-06","Excess",6411,3767,6409,0,0,28,53491,91036,3298,0],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-07","In range",3882,3767,6409,0,0,0,53491,55124,2529,74124],["BTR-2202","Windowsill Planter Box","Outdoor Gardening","Garden Kits","Domestic","United States","2027-08","Excess",6411,3767,6409,0,0,28,53491,91036,2691,0],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-09","Buy",5804,12769,15712,4756,61373,0,112515,51143,2368,86812],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-10","In transit",8107,12769,15712,4884,41080,0,112515,71436,2581,0],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-11","Buy",8482,12769,15712,3553,37775,0,112515,74740,3178,49592],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-12","Excess",15717,12769,15712,0,0,44,112515,138492,2617,40551],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-01","In range",13417,12769,15712,0,0,0,112515,118225,2300,49222],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-02","Excess",15714,12769,15712,0,0,18,112515,138465,3331,44833],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-03","Excess",15715,12769,15712,0,0,26,112515,138474,4601,28973],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-04","Excess",15717,12769,15712,0,0,44,112515,138492,5584,0],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-05","Excess",15714,12769,15712,0,0,18,112515,138465,5091,44992],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-06","Excess",15714,12769,15712,0,0,18,112515,138465,3288,0],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-07","In range",13224,12769,15712,0,0,0,112515,116525,2490,0],["BTR-2203","Kids Pizza Garden Grow Kit","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-08","Excess",15713,12769,15712,0,0,9,112515,138457,2617,0],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-09","In transit",8097,8805,10429,2054,12477,0,155172,142695,1408,83957],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-10","In range",9007,8805,10429,2426,0,0,155172,158732,1516,0],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-11","Buy",7164,8805,10429,0,28920,0,155172,126253,1843,55760],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2026-12","In range",10429,8805,10429,0,0,0,155172,183792,1499,44692],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-01","In range",9128,8805,10429,0,0,0,155172,160865,1301,53575],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-02","Excess",10432,8805,10429,0,0,53,155172,183845,1860,48288],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-03","Excess",10431,8805,10429,0,0,35,155172,183828,2537,30735],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-04","Excess",10430,8805,10429,0,0,18,155172,183810,3041,0],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-05","Excess",10432,8805,10429,0,0,53,155172,183845,2738,46878],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-06","Excess",10430,8805,10429,0,0,18,155172,183810,1746,0],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-07","In range",9124,8805,10429,0,0,0,155172,160794,1306,0],["BTR-2204","Garden Gift Set - Grow Your Own","Outdoor Gardening","Garden Kits","Import","Vietnam","2027-08","In range",10429,8805,10429,0,0,0,155172,183792,1355,0]]}</script>
+<script>
+(function(){
+  "use strict";
+  const raw=JSON.parse(document.getElementById('payload').textContent);
+  const C=raw.cols;
+  const ROWS=raw.rows.map(r=>{const o={};C.forEach((c,i)=>o[c]=r[i]);return o;});
+
+  const ORDER=["Stockout","Buy","In transit","In range","Excess"];
+  const CVAR={"Stockout":"--critical","Buy":"--serious","In transit":"--warning",
+              "In range":"--good","Excess":"--neutral"};
+  const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const col=a=>cssv(CVAR[a]);
+  const SHORT=["Stockout","Buy","In transit"];
+
+  const usd=v=>(v<0?"-":"")+"$"+Math.abs(Math.round(v)).toLocaleString("en-US");
+  const usdK=v=>Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":Math.abs(v)>=1e3?"$"+Math.round(v/1e3)+"K":usd(v);
+  const num=v=>Math.round(v).toLocaleString("en-US");
+  const sum=(rs,k)=>rs.reduce((a,r)=>a+r[k],0);
+
+  const tip=document.getElementById('tip');
+  const showTip=(e,h)=>{tip.innerHTML=h;tip.classList.add('on');
+    const p=12;let x=e.clientX+p,y=e.clientY+p;const r=tip.getBoundingClientRect();
+    if(x+r.width>innerWidth-8)x=e.clientX-r.width-p;
+    if(y+r.height>innerHeight-8)y=e.clientY-r.height-p;
+    tip.style.left=x+'px';tip.style.top=y+'px';};
+  const hideTip=()=>tip.classList.remove('on');
+
+  // ---- filters ------------------------------------------------------------
+  const F={division:'',category:'',sourcing:'',month:''};
+  const uniq=k=>[...new Set(ROWS.map(r=>r[k]))].sort();
+  function fill(id,key,label){
+    const el=document.getElementById(id);
+    el.innerHTML=`<option value="">All ${label}</option>`+uniq(key).map(v=>`<option>${v}</option>`).join('');
+    el.addEventListener('change',()=>{F[key]=el.value;render();});
+  }
+  fill('fDiv','division','divisions');fill('fCat','category','categories');
+  fill('fSrc','sourcing','sourcing');fill('fMon','month','months');
+  document.getElementById('reset').addEventListener('click',()=>{
+    Object.keys(F).forEach(k=>F[k]='');
+    ['fDiv','fCat','fSrc','fMon'].forEach(i=>document.getElementById(i).value='');
+    render();});
+  const apply=()=>ROWS.filter(r=>(!F.division||r.division===F.division)&&
+    (!F.category||r.category===F.category)&&(!F.sourcing||r.sourcing===F.sourcing)&&
+    (!F.month||r.month===F.month));
+
+  document.getElementById('stamp').innerHTML =
+    `${[...new Set(ROWS.map(r=>r.month))].length} months planned<br>${new Set(ROWS.map(r=>r.sku)).size} SKUs`;
+
+  // ---- KPIs ---------------------------------------------------------------
+  function kpis(d){
+    const below=d.filter(r=>SHORT.includes(r.action));
+    const items=[
+      {lab:"SKUs below minimum",val:num(new Set(below.map(r=>r.sku)).size),note:below.length+" SKU-months"},
+      {lab:"To buy",val:usdK(sum(d.filter(r=>r.action==="Buy"),"gapUsd")),note:"no inbound cover",dot:"Buy"},
+      {lab:"Already in transit",val:usdK(sum(d.filter(r=>r.action==="In transit"),"gapUsd")),note:"needs no action",dot:"In transit"},
+      {lab:"Excess above max",val:usdK(sum(d,"excessUsd")),note:"trapped capital",dot:"Excess"},
+      {lab:"On hand",val:usdK(sum(d,"onHandUsd")),note:"at landed cost"},
+      {lab:"Coverage",val:(sum(d,"reqUsd")?Math.min(sum(d,"onHandUsd")/sum(d,"reqUsd"),9.99):0).toLocaleString("en-US",{style:"percent",maximumFractionDigits:1}),note:"on hand vs required at min"},
+    ];
+    document.getElementById('kpis').innerHTML=items.map(i=>`<div class="kpi">
+      <div class="lab">${i.dot?`<span class="dot" style="background:${col(i.dot)}"></span>`:''}${i.lab}</div>
+      <span class="val">${i.val}</span><div class="note">${i.note}</div></div>`).join('');
+  }
+
+  // ---- donuts -------------------------------------------------------------
+  function donut(hostId,legId,parts,total,centre){
+    const host=document.getElementById(hostId);
+    if(!total){host.innerHTML='<div class="empty">No rows.</div>';
+      document.getElementById(legId).innerHTML='';return;}
+    const S=178,cx=S/2,cy=S/2,R=64,r=40;let a0=-Math.PI/2;
+    let s=`<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="${centre.label}">`;
+    parts.forEach(p=>{
+      if(!p.v)return;
+      const frac=p.v/total, a1=a0+frac*Math.PI*2, big=frac>.5?1:0;
+      const P=(rad,ang)=>[cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)];
+      const[x1,y1]=P(R,a0),[x2,y2]=P(R,a1),[x3,y3]=P(r,a1),[x4,y4]=P(r,a0);
+      s+=`<path d="M${x1},${y1} A${R},${R} 0 ${big},1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${big},0 ${x4},${y4} Z"
+            fill="${p.c}" stroke="var(--surface)" stroke-width="2" class="seg"
+            data-l="${p.l}" data-v="${p.v}" data-p="${(frac*100).toFixed(1)}" style="cursor:default"/>`;
+      a0=a1;
+    });
+    s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-family="var(--mono)" font-size="15"
+          font-weight="600" fill="var(--ink)">${centre.v}</text>`;
+    s+=`<text x="${cx}" y="${cy+13}" text-anchor="middle" font-family="var(--body)" font-size="9"
+          fill="var(--muted)">${centre.label}</text></svg>`;
+    host.innerHTML=s;
+    host.querySelectorAll('.seg').forEach(el=>{
+      el.addEventListener('mousemove',e=>showTip(e,`<b>${el.dataset.l}</b><br>${num(+el.dataset.v)} SKU-months<br>${el.dataset.p}%`));
+      el.addEventListener('mouseleave',hideTip);});
+    document.getElementById(legId).innerHTML=parts.filter(p=>p.v)
+      .map(p=>`<span><span class="dot" style="background:${p.c}"></span>${p.l} ${num(p.v)}</span>`).join('');
+  }
+
+  // ---- priority -----------------------------------------------------------
+  function prio(d){
+    const rows=[
+      {a:"Buy",t1:"Buy",t2:"No cover anywhere",k:"gapUsd"},
+      {a:"In transit",t1:"In transit",t2:"Inbound already covers it",k:"gapUsd"},
+      {a:"Stockout",t1:"Stockout",t2:"Zero on hand against demand",k:"gapUsd"},
+    ];
+    document.getElementById('prio').innerHTML=rows.map(r=>{
+      const rs=d.filter(x=>x.action===r.a);
+      return `<div class="it"><span class="dot" style="background:${col(r.a)}"></span>
+        <span class="txt"><span class="t1">${r.t1}</span>
+        <span class="t2">${r.t2} &middot; ${new Set(rs.map(x=>x.sku)).size} SKUs</span></span>
+        <span class="v" style="color:${col(r.a)}">${usdK(sum(rs,r.k))}</span></div>`;}).join('');
+  }
+
+  // ---- exposure bars ------------------------------------------------------
+  function chartAction(d){
+    const agg=ORDER.map(a=>{const rs=d.filter(r=>r.action===a);
+      return{action:a,value:a==="Excess"?sum(rs,"excessUsd"):sum(rs,"gapUsd"),
+             n:rs.length,skus:new Set(rs.map(r=>r.sku)).size};}).filter(x=>x.n>0);
+    const host=document.getElementById('chartAction');
+    if(!agg.length){host.innerHTML='<div class="empty">Nothing matches these filters.</div>';
+      document.getElementById('legendAction').innerHTML='';return;}
+    const W=430,rowH=44,padL=92,padR=68,H=agg.length*rowH+10;
+    const max=Math.max(...agg.map(a=>a.value),1),X=v=>padL+(v/max)*(W-padL-padR);
+    let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Dollar gap below minimum by bucket">`;
+    agg.forEach((a,i)=>{const y=i*rowH+6,bh=21,w=Math.max(X(a.value)-padL,2);
+      s+=`<text x="${padL-9}" y="${y+bh/2+4}" text-anchor="end" font-size="11.5" fill="var(--ink)" font-family="var(--body)">${a.action}</text>`;
+      s+=`<rect x="${padL}" y="${y}" width="${w}" height="${bh}" rx="4" fill="${col(a.action)}"
+            class="barA" data-a="${a.action}" data-v="${a.value}" data-n="${a.n}" data-s="${a.skus}" style="cursor:default"/>`;
+      s+=`<text x="${padL+w+7}" y="${y+bh/2+4}" font-family="var(--mono)" font-size="11" fill="var(--ink-2)">${usdK(a.value)}</text>`;
+      s+=`<text x="${padL}" y="${y+bh+12}" font-size="9.6" fill="var(--muted)" font-family="var(--body)">${a.skus} SKUs &middot; ${a.n} SKU-months</text>`;});
+    s+=`</svg>`;host.innerHTML=s;
+    host.querySelectorAll('.barA').forEach(el=>{
+      el.addEventListener('mousemove',e=>showTip(e,`<b>${el.dataset.a}</b><br>${usd(+el.dataset.v)}<br>${el.dataset.s} SKUs, ${el.dataset.n} SKU-months`));
+      el.addEventListener('mouseleave',hideTip);});
+    document.getElementById('legendAction').innerHTML=agg.map(a=>
+      `<span><span class="dot" style="background:${col(a.action)}"></span>${a.action}</span>`).join('');
+  }
+
+  // ---- coverage matrix, drillable to SKU ----------------------------------
+  const open={};
+  function metrics(rs){
+    const o={skus:new Set(rs.map(r=>r.sku)).size,onHand:sum(rs,"onHandUsd"),
+             req:sum(rs,"reqUsd"),gap:0,exc:sum(rs,"excessUsd")};
+    ORDER.forEach(a=>o[a]=rs.filter(r=>r.action===a).length);
+    o.gap=sum(rs.filter(r=>SHORT.includes(r.action)),"gapUsd");
+    o.varAbs=o.onHand-o.req;
+    o.pct=o.req?o.onHand/o.req:null;
+    return o;
+  }
+  function matrixRow(label,lvl,m,key,hasKids){
+    const toggle=hasKids
+      ? `<span class="exp" data-k="${key}">${open[key]?'&minus;':'+'}</span>`
+      : `<span class="leaf"></span>`;
+    const cell=a=>m[a]?`<span class="pill"><span class="dot" style="background:${col(a)}"></span>${m[a]}</span>`:'<span style="color:var(--muted)">&mdash;</span>';
+    return `<tr class="lvl${lvl}"><td>${toggle}${label}</td>
+      <td class="n">${num(m.skus)}</td>
+      <td class="n">${usdK(m.onHand)}</td>
+      <td class="n">${usdK(m.req)}</td>
+      <td class="n ${m.varAbs<0?'neg':''}">${usdK(m.varAbs)}</td>
+      <td class="n ${m.gap?'neg':''}">${m.gap?usdK(m.gap):'&mdash;'}</td>
+      <td class="n">${m.exc?usdK(m.exc):'&mdash;'}</td>
+      ${ORDER.map(a=>`<td>${cell(a)}</td>`).join('')}
+      <td class="n">${m.pct===null?'&mdash;':(m.pct*100).toFixed(1)+'%'}</td></tr>`;
+  }
+  function matrix(d){
+    const el=document.getElementById('matrix');
+    if(!d.length){el.innerHTML=`<tbody><tr><td class="empty">Nothing matches these filters.</td></tr></tbody>`;return;}
+    let body='';
+    [...new Set(d.map(r=>r.division))].sort().forEach(dv=>{
+      const dr=d.filter(r=>r.division===dv), kd='d|'+dv;
+      body+=matrixRow(dv,0,metrics(dr),kd,true);
+      if(open[kd]){
+        [...new Set(dr.map(r=>r.category))].sort().forEach(ct=>{
+          const cr=dr.filter(r=>r.category===ct), kc='c|'+dv+'|'+ct;
+          body+=matrixRow(ct,1,metrics(cr),kc,true);
+          if(open[kc]){
+            const skus=[...new Set(cr.map(r=>r.sku))].sort();
+            skus.map(sk=>{const sr=cr.filter(r=>r.sku===sk);
+              return{lbl:sr[0].product,m:metrics(sr)};})
+              .sort((a,b)=>b.m.gap-a.m.gap)
+              .forEach(x=>{body+=matrixRow(x.lbl,2,x.m,'',false);});
+          }
+        });
+      }
+    });
+    body+=matrixRow('<strong>Total</strong>',0,metrics(d),'',false).replace('<tr class="lvl0"','<tr class="lvl0 tot"');
+    el.innerHTML=`<thead><tr><th>Division / Category / SKU</th><th class="n">SKUs</th>
+      <th class="n">On hand $</th><th class="n">Required $</th><th class="n">Variance</th>
+      <th class="n">Shortfall $</th><th class="n">Excess $</th>
+      ${ORDER.map(a=>`<th>${a}</th>`).join('')}<th class="n">% cover</th></tr></thead>
+      <tbody>${body}</tbody>`;
+    el.querySelectorAll('.exp').forEach(b=>b.addEventListener('click',()=>{
+      const k=b.dataset.k;open[k]=!open[k];matrix(apply());}));
+  }
+
+  // ---- buy list -----------------------------------------------------------
+  function buyTable(d){
+    const rs=d.filter(r=>r.action==="Buy").sort((a,b)=>b.gapUsd-a.gapUsd);
+    const el=document.getElementById('buyTable');
+    if(!rs.length){el.innerHTML=`<tbody><tr><td class="empty">No purchase orders needed under these filters.</td></tr></tbody>`;return;}
+    el.innerHTML=`<thead><tr><th>Product</th><th>Category</th><th>Month</th><th>Origin</th>
+      <th class="n">On hand</th><th class="n">Min</th><th class="n">In transit</th>
+      <th class="n">Gap to min</th></tr></thead><tbody>`+
+      rs.map(r=>`<tr><td>${r.product}</td><td>${r.category}</td>
+        <td style="font-family:var(--mono)">${r.month}</td><td>${r.origin}</td>
+        <td class="n">${num(r.onHand)}</td><td class="n">${num(r.min)}</td>
+        <td class="n">${num(r.inTransit)}</td>
+        <td class="n" style="font-weight:600">${usd(r.gapUsd)}</td></tr>`).join('')+`</tbody>`;
+  }
+
+  function render(){
+    const d=apply();
+    kpis(d);prio(d);chartAction(d);matrix(d);buyTable(d);
+    const avail=d.filter(r=>!SHORT.includes(r.action));
+    donut('donutAvail','legAvail',
+      [{l:"In range",v:avail.filter(r=>r.action==="In range").length,c:col("In range")},
+       {l:"Excess",v:avail.filter(r=>r.action==="Excess").length,c:col("Excess")}],
+      avail.length,{v:num(avail.length),label:"available"});
+    const shortR=d.filter(r=>SHORT.includes(r.action));
+    donut('donutShort','legShort',
+      SHORT.map(a=>({l:a,v:shortR.filter(r=>r.action===a).length,c:col(a)})),
+      shortR.length,{v:num(shortR.length),label:"below min"});
+  }
+  render();
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',render);
+})();
+</script>
