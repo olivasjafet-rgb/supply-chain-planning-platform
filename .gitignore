@@ -15,3 +15,6 @@ outputs/
 
 # Personal working notes. Not part of the deliverable.
 presentation/my_prep.html
+
+# Intermediate PbixProj folder produced while building the template.
+powerbi/_pbixproj/
